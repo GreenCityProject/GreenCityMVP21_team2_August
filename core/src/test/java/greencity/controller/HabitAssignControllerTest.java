@@ -194,18 +194,18 @@ class HabitAssignControllerTest {
                         .principal(principal))
                 .andExpect(status().isOk());
 
-        verify(habitAssignService).getAllCustomHabitAssignsByUserId(userVO.getId(), Locale.ENGLISH.getLanguage());
+        verify(habitAssignService).getAllHabitAssignsByUserIdAndStatusNotCancelled(userVO.getId(), Locale.ENGLISH.getLanguage());
     }
 
     @Test
     void getUserShoppingAndCustomShoppingLists_CorrectData_ResponseOk() throws Exception {
         when(userService.findByEmail(anyString())).thenReturn(userVO);
         final long habitAssignId = 1;
-        mockMvc.perform(get(habitAssignLink + "{habitAssignId}/allUserAndCustomList", habitAssignId)
+        mockMvc.perform(get(habitAssignLink + "/{habitAssignId}/allUserAndCustomList", habitAssignId)
                         .principal(principal))
                 .andExpect(status().isOk());
 
-        verify(habitAssignService).getUserShoppingAndCustomShoppingLists(habitAssignId, userVO.getId(), Locale.ENGLISH.getLanguage());
+        verify(habitAssignService).getUserShoppingAndCustomShoppingLists(userVO.getId(), habitAssignId, Locale.ENGLISH.getLanguage());
     }
 
     @Test
