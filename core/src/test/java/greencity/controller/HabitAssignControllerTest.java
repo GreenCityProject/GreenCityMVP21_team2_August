@@ -2,11 +2,9 @@ package greencity.controller;
 
 import greencity.constant.ErrorMessage;
 import greencity.converters.UserArgumentResolver;
-import greencity.dto.habit.HabitAssignCustomPropertiesDto;
-import greencity.dto.habit.UserShoppingAndCustomShoppingListsDto;
-import greencity.dto.shoppinglistitem.CustomShoppingListItemResponseDto;
+import greencity.dto.habit.*;
 import greencity.dto.user.UserVO;
-import greencity.enums.ShoppingListItemStatus;
+import greencity.enums.HabitAssignStatus;
 import greencity.exception.exceptions.InvalidStatusException;
 import greencity.exception.exceptions.NotFoundException;
 import greencity.exception.exceptions.UserHasNoPermissionToAccessException;
@@ -29,14 +27,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.security.Principal;
-import java.util.List;
+import java.time.LocalDate;
 import java.util.Locale;
 
 import static greencity.ModelUtils.*;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -271,5 +267,146 @@ class HabitAssignControllerTest {
                 .andExpect(status().isOk());
 
         verify(habitAssignService).findHabitByUserIdAndHabitAssignId(userVO.getId(), habitId, Locale.ENGLISH.getLanguage());
+    }
+
+    @Test
+    void updateAssignByHabitId_CorrectData_ResponseOk() throws Exception {
+        final long habitAssignId = 4;
+
+        HabitAssignStatDto habitAssignStatDto = new HabitAssignStatDto();
+        habitAssignStatDto.setStatus(HabitAssignStatus.ACQUIRED);
+
+        mockMvc.perform(patch(habitAssignLink + "/{habitAssignId}", habitAssignId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(habitAssignStatDto)))
+                .andExpect(status().isOk());
+
+        verify(habitAssignService).updateStatusByHabitAssignId(habitAssignId, habitAssignStatDto);
+    }
+
+    @Test
+    void updateAssignByHabitId_NotCorrectBody_ConstraintViolations() throws Exception {
+        final long habitAssignId = 4;
+
+        mockMvc.perform(patch(habitAssignLink + "/{habitAssignId}", habitAssignId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().is(400));
+
+        verify(habitAssignService, never()).updateStatusByHabitAssignId(anyLong(), any());
+    }
+
+    @Test
+    void enrollHabit_CorrectData_ResponseOk() throws Exception {
+        when(userService.findByEmail(anyString())).thenReturn(userVO);
+        final long habitAssignId = 4;
+        final LocalDate date = LocalDate.now();
+
+        mockMvc.perform(post(habitAssignLink + "/{habitAssignId}/enroll/{date}", habitAssignId, date)
+                        .principal(principal))
+                .andExpect(status().isOk());
+
+        verify(habitAssignService).enrollHabit(habitAssignId, userVO.getId(), date, Locale.ENGLISH.getLanguage());
+    }
+
+    @Test
+    void unenrollHabit_CorrectData_ResponseOk() throws Exception {
+        when(userService.findByEmail(anyString())).thenReturn(userVO);
+        final long habitAssignId = 4;
+        final LocalDate date = LocalDate.now();
+
+        mockMvc.perform(post(habitAssignLink + "/{habitAssignId}/unenroll/{date}", habitAssignId, date)
+                        .principal(principal))
+                .andExpect(status().isOk());
+
+        verify(habitAssignService).unenrollHabit(habitAssignId, userVO.getId(), date);
+    }
+
+    @Test
+    void getInprogressHabitAssignOnDate_CorrectData_ResponseOk() throws Exception {
+        when(userService.findByEmail(anyString())).thenReturn(userVO);
+        final LocalDate date = LocalDate.now();
+
+        mockMvc.perform(get(habitAssignLink + "/active/{date}", date)
+                        .principal(principal))
+                .andExpect(status().isOk());
+
+        verify(habitAssignService).findInprogressHabitAssignsOnDate(userVO.getId(), date, Locale.ENGLISH.getLanguage());
+    }
+
+    @Test
+    void getHabitAssignBetweenDates_CorrectData_ResponseOk() throws Exception {
+        when(userService.findByEmail(anyString())).thenReturn(userVO);
+        final LocalDate startDate = LocalDate.now();
+        final LocalDate endDate = LocalDate.now();
+
+        mockMvc.perform(get(habitAssignLink + "/activity/{from}/to/{to}", startDate, endDate)
+                        .principal(principal))
+                .andExpect(status().isOk());
+
+        verify(habitAssignService).findHabitAssignsBetweenDates(userVO.getId(), startDate, endDate, Locale.ENGLISH.getLanguage());
+    }
+
+    @Test
+    void cancelHabitAssign_CorrectData_ResponseOk() throws Exception {
+        when(userService.findByEmail(anyString())).thenReturn(userVO);
+        final long habitId = 4;
+
+        mockMvc.perform(patch(habitAssignLink + "/cancel/{habitId}", habitId)
+                        .principal(principal))
+                .andExpect(status().isOk());
+
+        verify(habitAssignService).cancelHabitAssign(habitId, userVO.getId());
+    }
+
+    @Test
+    void deleteHabitAssign_CorrectData_ResponseOk() throws Exception {
+        when(userService.findByEmail(anyString())).thenReturn(userVO);
+        final long habitAssignId = 4;
+
+        mockMvc.perform(delete(habitAssignLink + "/delete/{habitId}", habitAssignId)
+                        .principal(principal))
+                .andExpect(status().isOk());
+
+        verify(habitAssignService).deleteHabitAssign(habitAssignId, userVO.getId());
+    }
+
+    @Test
+    void deleteHabitAssignByHabitId_InvalidData_NotFoundException() throws Exception {
+        when(userService.findByEmail(anyString())).thenReturn(userVO);
+        doThrow(new NotFoundException("Habit not found"))
+                .when(habitAssignService)
+                .deleteHabitAssign(anyLong(), anyLong());
+
+        mockMvc.perform(delete(habitAssignLink + "/delete/{habitId}", 1)
+                .principal(principal))
+                .andExpect(status().isNotFound());
+
+        verify(habitAssignService).deleteHabitAssign(anyLong(), anyLong());
+    }
+
+    @Test
+    void updateShoppingListStatus_CorrectData_ResponseOk() throws Exception {
+        final long habitAssignId = 4;
+        UpdateUserShoppingListDto updateUserShoppingListDto = getUpdateUserShoppingListDto();
+
+        mockMvc.perform(put(habitAssignLink + "/saveShoppingListForHabitAssign", habitAssignId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateUserShoppingListDto)))
+                .andExpect(status().isOk());
+
+        verify(habitAssignService).updateUserShoppingListItem(updateUserShoppingListDto);
+    }
+
+    @Test
+    void updateProgressNotificationHasDisplayed_CorrectData_ResponseOk() throws Exception {
+        when(userService.findByEmail(anyString())).thenReturn(userVO);
+        final long habitAssignId = 4;
+
+        mockMvc.perform(put(habitAssignLink + "/{habitAssignId}/updateProgressNotificationHasDisplayed", habitAssignId)
+                        .principal(principal))
+                .andExpect(status().isOk());
+
+        verify(habitAssignService).updateProgressNotificationHasDisplayed(habitAssignId, userVO.getId());
     }
 }
