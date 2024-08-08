@@ -5,6 +5,7 @@ import greencity.exception.exceptions.InvalidURLException;
 import greencity.exception.exceptions.WrongCountOfTagsException;
 import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,31 +24,37 @@ class EcoNewsDtoRequestValidatorTest {
     private EcoNewsDtoRequestValidator validator;
     @Mock
     private ConstraintValidatorContext context;
+    private AddEcoNewsDtoRequest request;
+
+    @BeforeEach
+    void setUp() {
+        request = getAddEcoNewsDtoRequest();
+    }
 
     @Test
     void isValid_CorrectUrl_ReturnsTrue() {
-        final AddEcoNewsDtoRequest request = getAddEcoNewsDtoRequest();
+        request = getAddEcoNewsDtoRequest();
         request.setSource("https://eco-lavca.ua/");
         assertTrue(validator.isValid(request, context));
     }
 
     @Test
     void isValid_Numbers_ThrowsInvalidURLException() {
-        final AddEcoNewsDtoRequest request = getAddEcoNewsDtoRequest();
+        request = getAddEcoNewsDtoRequest();
         request.setSource("123");
         Assertions.assertThrowsExactly(InvalidURLException.class, () -> validator.isValid(request, context));
     }
 
     @Test
     void isValid_EmptyListOfTags_ThrowsWrongCountOfTagsException() {
-        final AddEcoNewsDtoRequest request = getAddEcoNewsDtoRequest();
+        request = getAddEcoNewsDtoRequest();
         request.setTags(EMPTY_LIST);
         Assertions.assertThrowsExactly(WrongCountOfTagsException.class, () -> validator.isValid(request, context));
     }
 
     @Test
     void isValid_RedundantQuantityOfTags_ThrowsWrongCountOfTagsException() {
-        final AddEcoNewsDtoRequest request = getAddEcoNewsDtoRequest();
+        request = getAddEcoNewsDtoRequest();
         final ArrayList<String> tags = new ArrayList<>();
         tags.add("eco");
         tags.add("news");
@@ -60,7 +67,7 @@ class EcoNewsDtoRequestValidatorTest {
 
     @Test
     void isValid_EmptyUrl_ReturnsTrue() {
-        final AddEcoNewsDtoRequest request = getAddEcoNewsDtoRequest();
+        request = getAddEcoNewsDtoRequest();
         request.setSource("");
         assertTrue(validator.isValid(request, context));
     }
