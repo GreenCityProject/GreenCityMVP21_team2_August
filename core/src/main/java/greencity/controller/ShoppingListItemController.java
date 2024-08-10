@@ -98,8 +98,7 @@ public class ShoppingListItemController {
         @ApiResponse(responseCode = "403", description = HttpStatuses.FORBIDDEN),
     })
     @DeleteMapping
-    public void delete(
-        @Parameter(hidden = true) @CurrentUser UserVO user, Long habitId, Long shoppingListItemId) {
+    public void delete(@Parameter(hidden = true) @CurrentUser UserVO user, Long habitId, Long shoppingListItemId) {
         shoppingListItemService.deleteUserShoppingListItemByItemIdAndUserIdAndHabitId(shoppingListItemId, user.getId(),
             habitId);
     }
