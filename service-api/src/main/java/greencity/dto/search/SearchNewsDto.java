@@ -24,6 +24,4 @@ public class SearchNewsDto {
     private ZonedDateTime creationDate;
     @NotEmpty
     private List<String> tags;
-
-
 }
