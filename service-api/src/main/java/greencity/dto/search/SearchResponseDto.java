@@ -12,4 +12,12 @@ public class SearchResponseDto {
     List<SearchNewsDto> ecoNews;
 
     Long countOfResults;
+
+    public SearchResponseDto() {
+    }
+
+    public SearchResponseDto(List<SearchNewsDto> mockEcoNews, long l) {
+    }
 }
+
+
