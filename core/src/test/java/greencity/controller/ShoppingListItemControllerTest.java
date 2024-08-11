@@ -31,6 +31,7 @@ import java.util.Locale;
 import static greencity.ModelUtils.getPrincipal;
 import static greencity.ModelUtils.getUserVO;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -194,18 +195,35 @@ public class ShoppingListItemControllerTest {
         mockMvc.perform(patch(STR."\{USER_SHOPPING_LIST_ITEMS_URL}/{userShoppingListItemId}/status/{status}", userShoppingListItemId, status)
                         .param("lang", String.valueOf(locale))
                         .principal(principal))
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk());
+
     }
 
     @Test
-    public void updateUserShoppingListItemStatus() {
+    public void updateUserShoppingListItemStatus() throws Exception {
         Long userShoppingListItemId = 1L;
+        String status = "COMPLETED";
 
+        when(userService.findByEmail(anyString())).thenReturn(userVO);
 
+        mockMvc.perform(patch(STR."\{USER_SHOPPING_LIST_ITEMS_URL}/{userShoppingListItemId}/status/{status}", userShoppingListItemId, status)
+                        .param("lang", String.valueOf(locale))
+                        .principal(principal))
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void updateUserShoppingListItemStatusWithoutLanguageParamTest() {
+    public void updateUserShoppingListItemStatusWithoutLanguageParamTest() throws Exception {
+        Long userShoppingListItemId = 1L;
+        String status = "COMPLETED";
+
+        when(userService.findByEmail(anyString())).thenReturn(userVO);
+
+
+        mockMvc.perform(patch(STR."\{USER_SHOPPING_LIST_ITEMS_URL}/{userShoppingListItemId}/status/{status}", userShoppingListItemId, status)
+                        .principal(principal))
+                .andExpect(status().isOk());
+
     }
 
 
