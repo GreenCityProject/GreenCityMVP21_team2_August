@@ -17,13 +17,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -31,9 +29,7 @@ import java.util.Locale;
 import static greencity.ModelUtils.getPrincipal;
 import static greencity.ModelUtils.getUserVO;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -80,7 +76,7 @@ public class ShoppingListItemControllerTest {
     @Test
     public void bulkDeleteUserShoppingListItemTest() throws Exception {
         String ids = "1,2";
-        mockMvc.perform(delete(STR."\{USER_SHOPPING_LIST_ITEMS_URL}/user-shopping-list-items")
+        mockMvc.perform(delete(USER_SHOPPING_LIST_ITEMS_URL + "/user-shopping-list-items")
                         .param("ids", ids)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isOk());
@@ -111,7 +107,7 @@ public class ShoppingListItemControllerTest {
         dummyItem.setId(1L);
         dummyItem.setStatus("PROGRESS");
 
-        mockMvc.perform(get(STR."\{USER_SHOPPING_LIST_ITEMS_URL}/{userId}/get-all-inprogress", userId)
+        mockMvc.perform(get(USER_SHOPPING_LIST_ITEMS_URL + "/{userId}/get-all-inprogress", userId)
                         .param("lang", String.valueOf(locale))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -121,7 +117,7 @@ public class ShoppingListItemControllerTest {
     public void getUserShoppingListItemWithoutLanguageParamTest() throws Exception {
         Long habitId = 1L;
         when(userService.findByEmail(anyString())).thenReturn(getUserVO());
-        mockMvc.perform(get(STR."\{USER_SHOPPING_LIST_ITEMS_URL}/habits/{habitId}/shopping-list", habitId)
+        mockMvc.perform(get(USER_SHOPPING_LIST_ITEMS_URL + "/habits/{habitId}/shopping-list", habitId)
                         .principal(principal))
                 .andExpect(status().isOk());
     }
@@ -177,7 +173,7 @@ public class ShoppingListItemControllerTest {
                 .thenReturn(mockedList);
 
 
-        mockMvc.perform(get(STR."\{USER_SHOPPING_LIST_ITEMS_URL}/habits/{habitId}/shopping-list", habitId)
+        mockMvc.perform(get(USER_SHOPPING_LIST_ITEMS_URL + "/habits/{habitId}/shopping-list", habitId)
                         .locale(locale)
                         .principal(principal)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -192,7 +188,7 @@ public class ShoppingListItemControllerTest {
 
 
         when(userService.findByEmail(anyString())).thenReturn(userVO);
-        mockMvc.perform(patch(STR."\{USER_SHOPPING_LIST_ITEMS_URL}/{userShoppingListItemId}/status/{status}", userShoppingListItemId, status)
+        mockMvc.perform(patch(USER_SHOPPING_LIST_ITEMS_URL + "/{userShoppingListItemId}/status/{status}", userShoppingListItemId, status)
                         .param("lang", String.valueOf(locale))
                         .principal(principal))
                 .andExpect(status().isOk());
@@ -206,7 +202,7 @@ public class ShoppingListItemControllerTest {
 
         when(userService.findByEmail(anyString())).thenReturn(userVO);
 
-        mockMvc.perform(patch(STR."\{USER_SHOPPING_LIST_ITEMS_URL}/{userShoppingListItemId}/status/{status}", userShoppingListItemId, status)
+        mockMvc.perform(patch(USER_SHOPPING_LIST_ITEMS_URL + "/{userShoppingListItemId}/status/{status}", userShoppingListItemId, status)
                         .param("lang", String.valueOf(locale))
                         .principal(principal))
                 .andExpect(status().isOk());
@@ -220,7 +216,7 @@ public class ShoppingListItemControllerTest {
         when(userService.findByEmail(anyString())).thenReturn(userVO);
 
 
-        mockMvc.perform(patch(STR."\{USER_SHOPPING_LIST_ITEMS_URL}/{userShoppingListItemId}/status/{status}", userShoppingListItemId, status)
+        mockMvc.perform(patch(USER_SHOPPING_LIST_ITEMS_URL + "/{userShoppingListItemId}/status/{status}", userShoppingListItemId, status)
                         .principal(principal))
                 .andExpect(status().isOk());
 
