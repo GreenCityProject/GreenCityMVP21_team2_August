@@ -28,9 +28,8 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-public class SearchControllerTest {
+ class SearchControllerTest {
 
-    @Autowired
     private MockMvc mockMvc;
 
     @Mock
@@ -54,7 +53,7 @@ public class SearchControllerTest {
     void searchEverythingTest() throws Exception {
         String searchQuery = "Title";
         Locale locale = Locale.ENGLISH;
-        SearchResponseDto searchResponseDto = new SearchResponseDto();
+        SearchResponseDto searchResponseDto = mock(SearchResponseDto.class);
         when(searchService.search(searchQuery, locale.getLanguage())).thenReturn(searchResponseDto);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/search")
