@@ -155,7 +155,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,
                                 "/ownSecurity/signUp",
                                 "/ownSecurity/signIn",
-                                "/ownSecurity/changePassword")
+                                "/ownSecurity/changePassword",
+                                "/newsSubscriptions/subscribe",
+                                "/newsSubscriptions/unsubscribe")
                         .permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/achievements",
@@ -258,7 +260,9 @@ public class SecurityConfig {
                                 "/comments",
                                 "/comments/{id}",
                                 "/user/all",
-                                "/user/roles")
+                                "/user/roles",
+                                "/newsSubscriptions/isSubscribed",
+                                "/newsSubscriptions")
                         .hasAnyRole(ADMIN, MODERATOR)
                         .requestMatchers(HttpMethod.POST,
                                 "/place/filter/predicate")
