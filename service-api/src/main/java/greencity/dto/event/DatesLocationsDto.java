@@ -1,6 +1,7 @@
 package greencity.dto.event;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.time.ZonedDateTime;
@@ -17,8 +18,8 @@ public class DatesLocationsDto {
     @NotNull(message = "Finish date is mandatory")
     private ZonedDateTime finishDate;
 
-    @NotNull(message = "Coordinates are mandatory")
     private CoordinatesDto coordinates;
 
+    @Pattern(regexp = "^(https?://).*", message = "Please add a link to the event. The link must start with http(s)://")
     private String onlineLink;
 }

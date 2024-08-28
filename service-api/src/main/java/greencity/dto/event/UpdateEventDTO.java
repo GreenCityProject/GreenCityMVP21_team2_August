@@ -1,19 +1,24 @@
 package greencity.dto.event;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 @Builder
-public class AddEventDtoRequest {
+@NoArgsConstructor
+@AllArgsConstructor
+public class UpdateEventDTO {
+    @NotNull
+    private Long id;
+
     @NotBlank(message = "Title is mandatory")
     @Size(max = 70, message = "Title cannot exceed 70 characters")
     private String title;
@@ -22,16 +27,19 @@ public class AddEventDtoRequest {
     @Size(min = 20, max = 63206, message = "Description cannot exceed 63,206 characters")
     private String description;
 
-    private boolean open;
-
-    @NotNull(message = "Dates and locations are mandatory")
+    @Valid
     private List<DatesLocationsDto> datesLocations;
+
+    @NotNull
+    @Size(min = 1, max = 5, message = "You can upload up to 5 images")
+    private List<String> additionalImages;
+
+    private List<String> imagesToDelete;
 
     @NotNull(message = "Tags are mandatory")
     @Size(min = 1, message = "At least one tag is required")
     private List<String> tags;
 
     @NotNull
-    @Size(min = 1, max = 5, message = "You can upload up to 5 images")
-    private List<String> imagePaths;
+    private Boolean isOpen;
 }
