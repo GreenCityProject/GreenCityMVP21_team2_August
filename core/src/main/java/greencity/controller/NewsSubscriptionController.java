@@ -37,7 +37,6 @@ public class NewsSubscriptionController {
     })
     @GetMapping
     public ResponseEntity<List<NewsSubscriptionDto>> findAll() {
-        System.out.println("fe");
         return ResponseEntity.status(HttpStatus.OK)
                 .body(newsSubscriptionService.findAll());
     }
