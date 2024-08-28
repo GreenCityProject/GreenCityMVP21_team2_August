@@ -93,6 +93,7 @@ public final class ErrorMessage {
     public static final String ECO_NEWS_NOT_FOUND_BY_ID = "Eco news doesn't exist by this id: ";
     public static final String ECO_NEWS_NOT_FOUND = "Eco news haven't been found";
     public static final String ECO_NEWS_NOT_SAVED = "Eco news haven't been saved because of constraint violation";
+    public static final String EVENT_NOT_SAVED = "Event haven't been saved because of constraint violation";
     public static final String USER_CANNOT_ADD_MORE_THAN_5_SOCIAL_NETWORK_LINKS =
         "User cannot add more than 5 social network links";
     public static final String INVALID_URI = "The string could not be parsed as a URI reference.";
@@ -133,6 +134,14 @@ public final class ErrorMessage {
     public static final String FILTER_NOT_FOUND_BY_ID = "Filter not found";
     public static final String USER_HAS_NO_FRIEND_WITH_ID = "User has no friend with this id: ";
     public static final String INVALID_DURATION = "The duration for such habit is lower than previously set";
+
+    public static final String WRONG_COUNT_OF_EVENT_TAGS_EXCEPTION = "Count of tags should be at least one";
+    public static final String EVENT_DATES_LOCATIONS_EMPTY_EXCEPTION= "Dates and locations cannot be empty";
+    public static final String INVALID_EVENT_LINK_EXCEPTION = "Please add a link to the event. The link must start with http(s)://";
+    public static final String EVENT_TITLE_MANDATORY_EXCEPTION = "Title is mandatory";
+    public static final String EVENT_TITLE_LENGTH_EXCEPTION = "Title cannot exceed 70 characters";
+    public static final String EVENT_DESCRIPTION_MANDATORY_EXCEPTION = "Description is mandatory";
+    public static final String EVENT_DESCRIPTION_LENGTH_EXCEPTION = "Description must be between 20 and 63,206 characters";
 
     private ErrorMessage() {
     }
