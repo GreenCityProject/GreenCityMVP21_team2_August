@@ -9,6 +9,7 @@ import greencity.dto.habitfact.*;
 import greencity.dto.language.LanguageDTO;
 import greencity.dto.language.LanguageTranslationDTO;
 import greencity.dto.language.LanguageVO;
+import greencity.dto.newssubscription.NewsSubscriptionDto;
 import greencity.dto.ownsecurity.OwnSecurityVO;
 import greencity.dto.search.SearchNewsDto;
 import greencity.dto.shoppinglistitem.CustomShoppingListItemResponseDto;
@@ -667,5 +668,24 @@ public class ModelUtils {
             .text("item")
             .status(ShoppingListItemStatus.INPROGRESS)
             .build();
+    }
+
+    public static NewsSubscriptionDto getNewsSubscriptionDto() {
+        return NewsSubscriptionDto.builder()
+                .token("token")
+                .email("email@gmail.com")
+                .build();
+    }
+
+    public static NewsSubscription getNewsSubscription() {
+        return NewsSubscription.builder()
+                .id(1L)
+                .email("email@gmail.com")
+                .token("token")
+                .build();
+    }
+
+    public static String getNewsSubscriptionToken() {
+        return "token";
     }
 }
