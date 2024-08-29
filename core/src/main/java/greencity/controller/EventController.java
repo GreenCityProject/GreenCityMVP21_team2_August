@@ -2,7 +2,6 @@ package greencity.controller;
 
 import greencity.annotations.CurrentUser;
 import greencity.annotations.ImageListValidation;
-import greencity.annotations.ValidAddEventDtoRequest;
 import greencity.constant.HttpStatuses;
 import greencity.constant.SwaggerExampleModel;
 import greencity.dto.event.AddEventDtoRequest;
@@ -44,7 +43,7 @@ public class EventController {
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<AddEventDtoResponse> save(
             @Parameter(description = SwaggerExampleModel.ADD_EVENT, required = true)
-            @ValidAddEventDtoRequest @RequestPart AddEventDtoRequest addEventDtoRequest,
+            @Valid @RequestPart AddEventDtoRequest addEventDtoRequest,
             @Parameter(description = "Images of the event")
             @RequestPart(required = false) @ImageListValidation List<MultipartFile> images,
             @Parameter(hidden = true) Principal principal) {
