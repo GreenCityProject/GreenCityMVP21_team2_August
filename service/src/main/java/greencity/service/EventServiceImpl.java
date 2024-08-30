@@ -39,7 +39,7 @@ public class EventServiceImpl implements EventService {
         Event eventToSave = genericSave(addEventDtoRequest, images, email);
 
         AddEventDtoResponse addEventDtoResponse = modelMapper.map(eventToSave, AddEventDtoResponse.class);
-//        sendEmailDto(addEventDtoResponse, eventToSave.getAuthor());
+        sendEmailDto(addEventDtoResponse, eventToSave.getAuthor());
 
         return addEventDtoResponse;
     }
@@ -105,7 +105,7 @@ public class EventServiceImpl implements EventService {
                 .imagePaths(addEventDtoResponse.getImagePaths())
                 .datesLocations(addEventDtoResponse.getDatesLocations())
                 .build();
-            restClient.addEvent(dto);
+            restClient.addEvent(dto, accessToken);
     }
 
     private void enhanceWithNewData(Event toUpdate, UpdateEventDTO updateEventDTO,

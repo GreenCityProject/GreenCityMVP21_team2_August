@@ -11,6 +11,7 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode
 public class DatesLocationsDto {
     @NotNull(message = "Start date is mandatory")
     private ZonedDateTime startDate;
