@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="Fedyk-2" author="Vitalii Fedyk">
+        <createTable tableName="notifications">
+            <column name="id" autoIncrement="true" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="message" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="viewed_date" type="datetime"/>
+            <column name="viewed" defaultValue="false" type="boolean"/>
+            <column name="type" type="varchar(30)"/>
+            <column name="project_name" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="notifications"
+                                 baseColumnNames="user_id"
+                                 constraintName="FK_NOTIFICATIONS_USERS"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+        />
+    </changeSet>
+    <changeSet id="Fedyk-3" author="Vitalii Fedyk">
+        <createTable tableName="notifications_users">
+            <column name="notification_id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="notifications_users"
+                                 baseColumnNames="notification_id"
+                                 constraintName="FK_NOTIFICATIONS_USERS_NOTIFICATIONS"
+                                 referencedTableName="notifications"
+                                 referencedColumnNames="id"
+        />
+        <addForeignKeyConstraint baseTableName="notifications_users"
+                                 baseColumnNames="user_id"
+                                 constraintName="FK_NOTIFICATIONS_USERS_USERS"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+        />
+    </changeSet>
+</databaseChangeLog>
