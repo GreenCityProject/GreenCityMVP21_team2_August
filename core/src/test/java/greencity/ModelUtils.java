@@ -16,6 +16,7 @@ import greencity.dto.habittranslation.HabitTranslationDto;
 import greencity.dto.language.LanguageDTO;
 import greencity.dto.language.LanguageTranslationDTO;
 import greencity.dto.language.LanguageVO;
+import greencity.dto.newssubscription.NewsSubscriptionDto;
 import greencity.dto.shoppinglistitem.CustomShoppingListItemResponseDto;
 import greencity.dto.shoppinglistitem.ShoppingListItemPostDto;
 import greencity.dto.shoppinglistitem.ShoppingListItemRequestDto;
@@ -396,4 +397,9 @@ public class ModelUtils {
             .build();
     }
 
+    public static NewsSubscriptionDto getNewsSubscriptionDtoForRequest() {
+        return NewsSubscriptionDto.builder()
+            .email("email@gmail.com")
+            .build();
+    }
 }
