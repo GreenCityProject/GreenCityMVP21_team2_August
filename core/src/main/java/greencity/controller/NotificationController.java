@@ -147,6 +147,26 @@ public class NotificationController {
         return notificationService.getByFilter(userVO.getId(), pageable, searchCriteria, locale.getLanguage());
     }
 
+    @Operation(summary = "Get notification by id")
+    @ApiLocale
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = NotificationReadDto.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<NotificationReadDto> getNotificationById(@Parameter(hidden = true) @PathVariable Long id,
+                                                                  @Parameter(hidden = true) @ValidLanguage Locale locale) {
+        return ResponseEntity.ok().body(notificationService.getById(id, locale.getLanguage()));
+    }
+
+    /**
+     * Parses a string containing search criteria and converts it into a list of {@link SearchCriteria} objects.
+     * The input string should contain criteria in the format "key:type:value," where each criterion is separated by a comma.
+     * This method uses a regular expression to match each criterion and extract the key, type, and value components.
+     *
+     * @param criteriaFilter the string containing the search criteria to be parsed, formatted as "key:type:value,".
+     * @return a list of {@link SearchCriteria} objects constructed from the parsed criteria in the input string.
+     */
     private List<SearchCriteria> parseSearchCriteria(final String criteriaFilter) {
         final Pattern pattern = Pattern.compile("(\\w+)(:)(\\w+),");
         final Matcher matcher = pattern.matcher(criteriaFilter + ",");
