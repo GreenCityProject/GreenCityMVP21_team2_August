@@ -30,12 +30,22 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This class handles all the RESTful API requests related to notifications.
+ */
 @RestController
 @RequestMapping("/notifications")
 @AllArgsConstructor
 public class NotificationController {
     private NotificationService notificationService;
 
+    /**
+     * Creates a new notification.
+     *
+     * @param notificationCreateDto the notification to be created
+     * @param locale the locale of the notification
+     * @return the created notification
+     */
     @Operation(summary = "Create a notification")
     @ApiLocale
     @ApiResponses(value = {
@@ -44,10 +54,16 @@ public class NotificationController {
     })
     @PostMapping
     public ResponseEntity<NotificationReadDto> createNotification(@Valid @RequestBody NotificationCreateDto notificationCreateDto,
-                                                                   @Parameter(hidden = true) @ValidLanguage Locale locale) {
+                                                                  @Parameter(hidden = true) @ValidLanguage Locale locale) {
         return ResponseEntity.status(HttpStatus.CREATED).body(notificationService.createNotification(notificationCreateDto, locale.getLanguage()));
     }
 
+    /**
+     * Gets the count of unread notifications for the current user.
+     *
+     * @param userVO the current user
+     * @return the count of unread notifications
+     */
     @Operation(summary = "Get count of unread notifications for the current user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Long.class))),
@@ -58,6 +74,13 @@ public class NotificationController {
         return ResponseEntity.ok().body(notificationService.countUnreadNotifications(userVO.getId()));
     }
 
+    /**
+     * Gets the 5 last unread notifications for the current user.
+     *
+     * @param userVO the current user
+     * @param locale the locale of the notifications
+     * @return the 5 last unread notifications
+     */
     @Operation(summary = "Get 5 last unread notifications for the current user")
     @ApiLocale
     @ApiResponses(value = {
@@ -74,6 +97,14 @@ public class NotificationController {
                 .body(notifications);
     }
 
+    /**
+     * Gets all notifications for the current user.
+     *
+     * @param userVO the current user
+     * @param pageable the pagination parameters
+     * @param locale the locale of the notifications
+     * @return all notifications for the current user
+     */
     @Operation(summary = "Get all notifications for the current user")
     @ApiLocale
     @PageableAsQueryParam
@@ -88,7 +119,15 @@ public class NotificationController {
         return ResponseEntity.ok().body(notificationService.getAllNotifications(pageable, userVO.getId(), locale.getLanguage()));
     }
 
-
+    /**
+     * Gets notifications by filter for the current user.
+     *
+     * @param userVO the current user
+     * @param pageable the pagination parameters
+     * @param criteriaFilter the filter criteria
+     * @param locale the locale of the notifications
+     * @return notifications by filter for the current user
+     */
     @Operation(summary = "Get notifications by filter for the current user")
     @ApiLocale
     @PageableAsQueryParam
@@ -122,6 +161,13 @@ public class NotificationController {
         return searchCriteria;
     }
 
+    /**
+     * Marks a notification as viewed.
+     *
+     * @param notificationId the ID of the notification
+     * @param userVO the current user
+     * @return a successful response
+     */
     @Operation(summary = "Mark notification as viewed")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation"),
@@ -134,6 +180,13 @@ public class NotificationController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Marks a notification as unviewed.
+     *
+     * @param notificationId the ID of the notification
+     * @param userVO the current user
+     * @return a successful response
+     */
     @Operation(summary = "Mark notification as unviewed")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation"),
