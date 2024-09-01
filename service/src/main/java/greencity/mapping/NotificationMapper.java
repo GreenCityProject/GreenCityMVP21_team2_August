@@ -12,7 +12,6 @@ public class NotificationMapper extends AbstractConverter<NotificationCreateDto,
     @Override
     public Notification convert(NotificationCreateDto source) {
         return Notification.builder()
-                .message(source.getMessage())
                 .type(source.getType())
                 .projectName(source.getProjectName())
                 .user(mapToUser(source.getUserId()))

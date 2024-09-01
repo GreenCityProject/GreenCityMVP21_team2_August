@@ -15,8 +15,8 @@ import lombok.Setter;
 @Setter
 @Getter
 public class NotificationCreateDto {
-    @NotBlank
-    private String message;
+    private String[] titleParams;
+    private String[] messageParams;
     @NotNull
     private NotificationType type;
     @NotNull

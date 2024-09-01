@@ -1,6 +1,8 @@
 package greencity.controller;
 
+import greencity.annotations.ApiLocale;
 import greencity.annotations.CurrentUser;
+import greencity.annotations.ValidLanguage;
 import greencity.dto.notification.NotificationCreateDto;
 import greencity.dto.notification.NotificationReadDto;
 import greencity.dto.user.UserVO;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,39 +37,15 @@ public class NotificationController {
     private NotificationService notificationService;
 
     @Operation(summary = "Create a notification")
+    @ApiLocale
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation",
                     content = @Content(schema = @Schema(implementation = NotificationReadDto.class)))
     })
     @PostMapping
-    public ResponseEntity<NotificationReadDto> createNotification(@Valid @RequestBody NotificationCreateDto notificationCreateDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(notificationService.createNotification(notificationCreateDto));
-    }
-
-    @Operation(summary = "Get 5 last unread notifications for the current user")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful operation",
-                    content = @Content(schema = @Schema(implementation = List.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
-    })
-    @GetMapping("/unread/latest")
-    public ResponseEntity<List<NotificationReadDto>> getFiveUnreadNotifications(@Parameter(hidden = true) @CurrentUser UserVO userVO) {
-        List<NotificationReadDto> notifications = notificationService.getFiveUnreadNotifications(userVO.getId());
-        return ResponseEntity.ok()
-                .body(notifications);
-    }
-
-    @Operation(summary = "Get all notifications for the current user")
-    @PageableAsQueryParam
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Page.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
-    })
-    @GetMapping("/all")
-    public ResponseEntity<Page<NotificationReadDto>> getAllNotifications(@Parameter(hidden = true) @CurrentUser UserVO userVO,
-                                                                         @Parameter(hidden = true) Pageable pageable) {
-        return ResponseEntity.ok().body(notificationService.getAllNotifications(pageable, userVO.getId()));
+    public ResponseEntity<NotificationReadDto> createNotification(@Valid @RequestBody NotificationCreateDto notificationCreateDto,
+                                                                   @Parameter(hidden = true) @ValidLanguage Locale locale) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(notificationService.createNotification(notificationCreateDto, locale.getLanguage()));
     }
 
     @Operation(summary = "Get count of unread notifications for the current user")
@@ -79,7 +58,39 @@ public class NotificationController {
         return ResponseEntity.ok().body(notificationService.countUnreadNotifications(userVO.getId()));
     }
 
+    @Operation(summary = "Get 5 last unread notifications for the current user")
+    @ApiLocale
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation",
+                    content = @Content(schema = @Schema(implementation = List.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
+    })
+    @GetMapping("/unread/latest")
+    public ResponseEntity<List<NotificationReadDto>> getFiveUnreadNotifications(@Parameter(hidden = true) @CurrentUser UserVO userVO,
+                                                                                @Parameter(hidden = true) @ValidLanguage Locale locale) {
+        List<NotificationReadDto> notifications = notificationService.getFiveUnreadNotifications(userVO.getId(), locale.getLanguage());
+        return ResponseEntity.ok()
+                .body(notifications);
+    }
+
+    @Operation(summary = "Get all notifications for the current user")
+    @ApiLocale
+    @PageableAsQueryParam
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Page.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
+    })
+    @GetMapping("/all")
+    public ResponseEntity<Page<NotificationReadDto>> getAllNotifications(@Parameter(hidden = true) @CurrentUser UserVO userVO,
+                                                                         @Parameter(hidden = true) Pageable pageable,
+                                                                         @Parameter(hidden = true) @ValidLanguage Locale locale) {
+        return ResponseEntity.ok().body(notificationService.getAllNotifications(pageable, userVO.getId(), locale.getLanguage()));
+    }
+
+
     @Operation(summary = "Get notifications by filter for the current user")
+    @ApiLocale
     @PageableAsQueryParam
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(schema = @Schema(implementation = Page.class))),
@@ -90,10 +101,11 @@ public class NotificationController {
             @Parameter(hidden = true) @CurrentUser UserVO userVO,
             @Parameter(hidden = true) Pageable pageable,
             @Parameter(allowReserved = true, description = "Criteria query which is used in format {key}{operator}{value}. " +
-                                                           "If there are several criteria, then use ',' between") @RequestParam String criteriaFilter
+                                                           "If there are several criteria, then use ',' between") @RequestParam String criteriaFilter,
+            @Parameter(hidden = true) @ValidLanguage Locale locale
     ) {
         final List<SearchCriteria> searchCriteria = parseSearchCriteria(criteriaFilter);
-        return notificationService.getByFilter(userVO.getId(), pageable, searchCriteria);
+        return notificationService.getByFilter(userVO.getId(), pageable, searchCriteria, locale.getLanguage());
     }
 
     private List<SearchCriteria> parseSearchCriteria(final String criteriaFilter) {

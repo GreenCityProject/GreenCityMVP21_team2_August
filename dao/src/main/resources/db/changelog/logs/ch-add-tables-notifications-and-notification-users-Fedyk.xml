@@ -7,7 +7,10 @@
             <column name="id" autoIncrement="true" type="BIGINT">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="message" type="varchar(100)">
+            <column name="title" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message" type="varchar(200)">
                 <constraints nullable="false"/>
             </column>
             <column name="created_date" type="datetime">
@@ -26,28 +29,6 @@
         <addForeignKeyConstraint baseTableName="notifications"
                                  baseColumnNames="user_id"
                                  constraintName="FK_NOTIFICATIONS_USERS"
-                                 referencedTableName="users"
-                                 referencedColumnNames="id"
-        />
-    </changeSet>
-    <changeSet id="Fedyk-3" author="Vitalii Fedyk">
-        <createTable tableName="notifications_users">
-            <column name="notification_id" type="bigint">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="user_id" type="bigint">
-                <constraints primaryKey="true"/>
-            </column>
-        </createTable>
-        <addForeignKeyConstraint baseTableName="notifications_users"
-                                 baseColumnNames="notification_id"
-                                 constraintName="FK_NOTIFICATIONS_USERS_NOTIFICATIONS"
-                                 referencedTableName="notifications"
-                                 referencedColumnNames="id"
-        />
-        <addForeignKeyConstraint baseTableName="notifications_users"
-                                 baseColumnNames="user_id"
-                                 constraintName="FK_NOTIFICATIONS_USERS_USERS"
                                  referencedTableName="users"
                                  referencedColumnNames="id"
         />

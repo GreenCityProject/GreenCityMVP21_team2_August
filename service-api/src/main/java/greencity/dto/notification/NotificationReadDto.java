@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 public class NotificationReadDto {
     private long id;
+    private String title;
     private String message;
     private LocalDateTime createdDate;
     private NotificationType type;
