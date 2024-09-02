@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class LowerCaseDeserializer extends JsonDeserializer<String> {
     @Override
-    public String deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
+    public String deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         return jsonParser.getValueAsString().toLowerCase();
     }
 }
