@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="Viktor Kapustianyk" id="events-table-Kapustianyk">
+        <sql>
+            CREATE TABLE events (
+                                    id BIGSERIAL PRIMARY KEY,
+                                    title VARCHAR(70) NOT NULL,
+                                    description VARCHAR(1024) NOT NULL,
+                                    open BOOLEAN NOT NULL,
+                                    author_id BIGINT NOT NULL,
+                                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                    CONSTRAINT fk_events_author FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE
+            );
+        </sql>
+    </changeSet>
+</databaseChangeLog>

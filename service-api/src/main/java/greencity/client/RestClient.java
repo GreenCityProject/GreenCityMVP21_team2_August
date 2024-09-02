@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import greencity.constant.RestTemplateLinks;
 import greencity.dto.PageableAdvancedDto;
 import greencity.dto.econews.EcoNewsForSendEmailDto;
+import greencity.dto.event.EventForSendEmailDto;
 import greencity.dto.user.*;
 import greencity.enums.EmailNotification;
 import greencity.enums.Role;
@@ -352,6 +353,21 @@ public class RestClient {
         restTemplate.exchange(greenCityUserServerAddress
             + RestTemplateLinks.ADD_ECO_NEWS, HttpMethod.POST, entity, Object.class)
             .getBody();
+    }
+
+    /**
+     * send AddEventMessage to GreenCityUser.
+     *
+     * @param message with information for sending email about adding new event.
+     *
+     */
+    public void addEvent(EventForSendEmailDto message) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<EventForSendEmailDto> entity = new HttpEntity<>(message, headers);
+        restTemplate.exchange(greenCityUserServerAddress
+                        + RestTemplateLinks.ADD_EVENT, HttpMethod.POST, entity, Object.class)
+                .getBody();
     }
 
     /**

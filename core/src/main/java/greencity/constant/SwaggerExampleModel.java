@@ -76,7 +76,7 @@ public final class SwaggerExampleModel {
         + "\t\"tags\":[\"Social\"]\n"
         + "}" + AFTER_EXAMPLE;
 
-    public static final String UPDATE_EVENT = BEFORE_EXAMPLE
+    public static final String UPDATE_EVENT_OLD = BEFORE_EXAMPLE
         + "{\n"
         + "\t\"id\":\0,\n"
         + "\t\"title\":\"string\",\n"
@@ -134,6 +134,34 @@ public final class SwaggerExampleModel {
         + "\t\"imagesToDelete\":[\"string\"]\n"
         + "\t\"tags\":[\"Social\"]\n"
         + "\t\"isOpen\":true\n"
+        + "}";
+
+    public static final String UPDATE_EVENT = BEFORE_EXAMPLE
+        + "{\n"
+        + "\t\"id\": 1,\n"
+        + "\t\"title\": \"string\",\n"
+        + "\t\"description\": \"string\",\n"
+        + "\t\"datesLocations\": [\n"
+        + "\t\t{\n"
+        + "\t\t\t\"startDate\": \"2023-05-27T15:00:00Z\",\n"
+        + "\t\t\t\"finishDate\": \"2023-05-27T17:00:00Z\",\n"
+        + "\t\t\t\"latitude\": 00.0000,\n"
+        + "\t\t\t\"longitude\": 00.0000,\n"
+        + "\t\t\t\"onlineLink\": \"string\"\n"
+        + "\t\t}\n"
+        + "\t],\n"
+        + "\t\"additionalImages\": [\n"
+        + "\t\t\"string\",\n"
+        + "\t\t\"string\"\n"
+        + "\t],\n"
+        + "\t\"imagesToDelete\": [\n"
+        + "\t\t\"string\"\n"
+        + "\t],\n"
+        + "\t\"tags\": [\n"
+        + "\t\t\"string\",\n"
+        + "\t\t\"string\"\n"
+        + "\t],\n"
+        + "\t\"isOpen\": true\n"
         + "}";
 
     private SwaggerExampleModel() {

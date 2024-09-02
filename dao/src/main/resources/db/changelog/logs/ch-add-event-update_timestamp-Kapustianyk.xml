@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="Viktor Kapustianyk" id="update_event_timestamp-Kapustianyk">
+        <sql splitStatements="false" stripComments="false" endDelimiter="$$">
+            CREATE OR REPLACE FUNCTION update_timestamp()
+            RETURNS TRIGGER AS $$
+            BEGIN
+                NEW.updated_at = CURRENT_TIMESTAMP;
+            RETURN NEW;
+            END;
+            $$ LANGUAGE plpgsql;
+        </sql>
+    </changeSet>
+</databaseChangeLog>
