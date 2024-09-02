@@ -402,4 +402,11 @@ public class ModelUtils {
             .email("email@gmail.com")
             .build();
     }
+
+    public static NewsSubscription getNewsSubscription() {
+        return NewsSubscription.builder()
+            .email("email@gmail.com")
+            .token("token")
+            .build();
+    }
 }
