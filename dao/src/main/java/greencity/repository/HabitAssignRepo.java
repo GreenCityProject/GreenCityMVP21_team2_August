@@ -293,4 +293,18 @@ public interface HabitAssignRepo extends JpaRepository<HabitAssign, Long>,
             + " WHERE ha.id = :habitAssignId AND ha.user.id = :userId")
     void updateProgressNotificationHasDisplayed(@Param("habitAssignId") Long habitAssignId,
         @Param("userId") Long userId);
+    @Query("SELECT DISTINCT ha FROM HabitAssign ha "
+            + "WHERE ha.user.id = :userId AND upper(ha.status) = upper(:status)")
+    List<HabitAssign> getHabitAssignByUserIdAndStatus(@Param("userId") Long userId,  @Param("status")String status);
+
+    /** Get all user habits.
+     *
+     * @param userId The ID of the user.
+     *
+     * @return list of {@link User}.
+     */
+    @Query("SELECT DISTINCT ha FROM HabitAssign ha "
+            + "JOIN User u ON ha.user.id = u.id "
+            + "WHERE u.id = :userId")
+    List<HabitAssign> getHabitsByUserID(@Param("userId") Long userId);
 }
