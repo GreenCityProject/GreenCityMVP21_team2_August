@@ -176,7 +176,6 @@
     <include file="db/changelog/logs/ch-drop-places-table-Bokalo.xml"/>
     <include file="db/changelog/logs/ch-drop-news-subscribers-table-Bokalo.xml"/>
     <include file="db/changelog/logs/ch-drop-user-friends-table-Bokalo.xml"/>
-
     <include file="db/changelog/logs/ch-add-events-table-Kapustianyk.xml"/>
     <include file="db/changelog/logs/ch-add-event_dates_locations-table-Kapustianyk.xml"/>
     <include file="db/changelog/logs/ch-add-event_tags-table-Kapustianyk.xml"/>
@@ -184,5 +183,7 @@
     <include file="db/changelog/logs/ch-add-event-update_timestamp-Kapustianyk.xml"/>
     <include file="db/changelog/logs/ch-add-event-trigers-timestamp-Kapustianyk.xml"/>
     <include file="db/changelog/logs/ch-add-changes-dates_location-Kapustianyk.xml"/>
+    <include file="db/changelog/logs/ch-add-table-news-subscriptions-Fedyk.xml"/>
+
 </databaseChangeLog>
 
