@@ -15,11 +15,11 @@ import lombok.*;
 public class NotificationCreateDto {
     private String[] titleParams;
     private String[] messageParams;
-    @NotNull
+    @NotNull(message = "Type is mandatory")
     private NotificationType type;
-    @NotNull
+    @NotNull(message = "Project name is mandatory")
     private ProjectName projectName;
-    @Positive
-    @NotNull
+    @Positive(message = "User id must be positive")
+    @NotNull(message = "User id is mandatory")
     private long userId;
 }
