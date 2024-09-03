@@ -13,6 +13,7 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode
 public class DatesLocationsDto {
     @NotNull(message = "Start date is mandatory")
     @FutureOrPresent(message = "Start date cannot be in the past.")
