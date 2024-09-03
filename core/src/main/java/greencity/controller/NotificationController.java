@@ -154,7 +154,7 @@ public class NotificationController {
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
     })
     @GetMapping("/{id}")
-    public ResponseEntity<NotificationReadDto> getNotificationById(@Parameter(hidden = true) @PathVariable Long id,
+    public ResponseEntity<NotificationReadDto> getNotificationById(@PathVariable Long id,
                                                                   @Parameter(hidden = true) @ValidLanguage Locale locale) {
         return ResponseEntity.ok().body(notificationService.getById(id, locale.getLanguage()));
     }

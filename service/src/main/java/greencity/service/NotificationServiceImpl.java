@@ -51,7 +51,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public NotificationReadDto createNotification(final NotificationCreateDto notificationCreateDto, final String language) {
         final Notification notification = modelMapper.map(notificationCreateDto, Notification.class);
-        final ResourceBundle bundle = ResourceBundle.getBundle(notificationBundle, Locale.forLanguageTag(language));
+        final ResourceBundle bundle = ResourceBundle.getBundle(notificationBundle, locale);
         final String[] titleParams = notificationCreateDto.getTitleParams();
         final String[] messageParams = notificationCreateDto.getMessageParams();
 
@@ -237,7 +237,7 @@ public class NotificationServiceImpl implements NotificationService {
                 ResourceBundle.Control.getNoFallbackControl(ResourceBundle.Control.FORMAT_PROPERTIES));
         final ResourceBundle resourceBundle = ResourceBundle.getBundle(notificationBundle, locale);
 
-        if (locale.getLanguage().equals(language)) {
+        if (!locale.getLanguage().equals(language)) {
             final String title = resourceBundle.getString(notificationReadDto.getType().name() + titleInBundle);
             final String message = resourceBundle.getString(notificationReadDto.getType().name() + messageInBundle);
             final String[] titleParams = parse(title, notificationReadDto.getTitle());

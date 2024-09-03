@@ -9,6 +9,7 @@ import greencity.dto.habitfact.*;
 import greencity.dto.language.LanguageDTO;
 import greencity.dto.language.LanguageTranslationDTO;
 import greencity.dto.language.LanguageVO;
+import greencity.dto.notification.NotificationReadDto;
 import greencity.dto.ownsecurity.OwnSecurityVO;
 import greencity.dto.search.SearchNewsDto;
 import greencity.dto.shoppinglistitem.CustomShoppingListItemResponseDto;
@@ -666,6 +667,15 @@ public class ModelUtils {
             .id(2L)
             .text("item")
             .status(ShoppingListItemStatus.INPROGRESS)
+            .build();
+    }
+
+    public static NotificationReadDto getNotificationReadDto() {
+        return NotificationReadDto.builder()
+            .title("New Event Created")
+            .message("A new event has been created: EVENT")
+            .projectName(ProjectName.GREEN_CITY)
+            .type(NotificationType.EVENT_CREATED)
             .build();
     }
 }
