@@ -16,12 +16,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ import java.util.regex.Pattern;
 @RestController
 @RequestMapping("/notifications")
 @AllArgsConstructor
+@Validated
 public class NotificationController {
     private NotificationService notificationService;
 
@@ -154,7 +157,7 @@ public class NotificationController {
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
     })
     @GetMapping("/{id}")
-    public ResponseEntity<NotificationReadDto> getNotificationById(@PathVariable Long id,
+    public ResponseEntity<NotificationReadDto> getNotificationById(@PathVariable @Positive Long id,
                                                                   @Parameter(hidden = true) @ValidLanguage Locale locale) {
         return ResponseEntity.ok().body(notificationService.getById(id, locale.getLanguage()));
     }
