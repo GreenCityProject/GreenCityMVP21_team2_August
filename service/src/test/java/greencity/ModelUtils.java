@@ -9,6 +9,7 @@ import greencity.dto.habitfact.*;
 import greencity.dto.language.LanguageDTO;
 import greencity.dto.language.LanguageTranslationDTO;
 import greencity.dto.language.LanguageVO;
+import greencity.dto.notification.NotificationReadDto;
 import greencity.dto.newssubscription.NewsSubscriptionDto;
 import greencity.dto.ownsecurity.OwnSecurityVO;
 import greencity.dto.search.SearchNewsDto;
@@ -670,6 +671,14 @@ public class ModelUtils {
             .build();
     }
 
+    public static NotificationReadDto getNotificationReadDto() {
+        return NotificationReadDto.builder()
+            .title("New Event Created")
+            .message("A new event has been created: EVENT")
+            .projectName(ProjectName.GREEN_CITY)
+            .type(NotificationType.EVENT_CREATED)
+            .build();
+      
     public static NewsSubscriptionDto getNewsSubscriptionDto() {
         return NewsSubscriptionDto.builder()
                 .token("token")

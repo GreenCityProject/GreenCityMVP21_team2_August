@@ -397,6 +397,16 @@ public class ModelUtils {
             .build();
     }
 
+    public static Notification getNotification() {
+        return Notification.builder()
+                .title("Notification")
+                .message("Message")
+                .viewed(false)
+                .type(NotificationType.EVENT_CREATED)
+                .projectName(ProjectName.GREEN_CITY)
+                .build();
+    }
+  
     public static NewsSubscriptionDto getNewsSubscriptionDtoForRequest() {
         return NewsSubscriptionDto.builder()
             .email("email@gmail.com")

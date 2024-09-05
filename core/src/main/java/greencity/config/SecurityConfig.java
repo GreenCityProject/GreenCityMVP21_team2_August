@@ -21,8 +21,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
+
 import java.util.Arrays;
 import java.util.Collections;
+
 import static greencity.constant.AppConstant.*;
 import static jakarta.servlet.http.HttpServletResponse.SC_FORBIDDEN;
 import static jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
@@ -42,7 +44,7 @@ public class SecurityConfig {
     private static final String USER_CUSTOM_SHOPPING_LIST_ITEMS = "/user/{userId}/custom-shopping-list-items";
     private static final String CUSTOM_SHOPPING_LIST = "/custom/shopping-list-items/{userId}";
     private static final String CUSTOM_SHOPPING_LIST_URL = "/custom/shopping-list-items/{userId}/"
-            + "custom-shopping-list-items";
+                                                           + "custom-shopping-list-items";
     private static final String CUSTOM_SHOPPING_LIST_ITEMS = "/{userId}/custom-shopping-list-items";
     private static final String HABIT_ASSIGN_ID = "/habit/assign/{habitId}";
     private static final String USER_SHOPPING_LIST = "/user/shopping-list-items";
@@ -77,19 +79,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain applicationSecurity(HttpSecurity http) throws Exception {
         http.cors(corsCustomizer -> corsCustomizer.configurationSource(request -> {
-            CorsConfiguration config = new CorsConfiguration();
-            config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
-            config.setAllowedOrigins(Collections.singletonList("http://localhost:4205"));
-            config.setAllowedMethods(
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+                    config.setAllowedOrigins(Collections.singletonList("http://localhost:4205"));
+                    config.setAllowedMethods(
                             Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
-            config.setAllowedHeaders(
+                    config.setAllowedHeaders(
                             Arrays.asList("Access-Control-Allow-Origin", "Access-Control-Allow-Headers",
                                     "X-Requested-With", "Origin", "Content-Type", "Accept", "Authorization"));
-            config.setAllowCredentials(true);
-            config.setAllowedHeaders(Collections.singletonList("*"));
-            config.setMaxAge(3600L);
-            return config;
-        }))
+                    config.setAllowCredentials(true);
+                    config.setAllowedHeaders(Collections.singletonList("*"));
+                    config.setMaxAge(3600L);
+                    return config;
+                }))
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .addFilterBefore(
@@ -197,7 +199,11 @@ public class SecurityConfig {
                                 "/habit/assign/{habitAssignId}",
                                 "/habit/tags/search",
                                 "/habit/search",
-                                "/habit/{habitId}/friends/profile-pictures")
+                                "/habit/{habitId}/friends/profile-pictures",
+                                "/notifications/filter",
+                                "/notifications/unread/latest",
+                                "/notifications/countUnread",
+                                "notifications/all")
                         .hasAnyRole(USER, ADMIN, MODERATOR, UBS_EMPLOYEE)
                         .requestMatchers(HttpMethod.POST,
                                 "/events",
@@ -243,7 +249,9 @@ public class SecurityConfig {
                                 USER_SHOPPING_LIST + "/{shoppingListItemId}/status/{status}",
                                 USER_SHOPPING_LIST + "/{userShoppingListItemId}",
                                 "/user/profilePicture",
-                                "/user/deleteProfilePicture")
+                                "/user/deleteProfilePicture",
+                                "/notifications/unview/{notificationId}",
+                                "/notifications/view/{notificationId}")
                         .hasAnyRole(USER, ADMIN, MODERATOR, UBS_EMPLOYEE)
                         .requestMatchers(HttpMethod.DELETE,
                                 ECONEWS_COMMENTS,
@@ -266,7 +274,8 @@ public class SecurityConfig {
                                 "/newsSubscriptions")
                         .hasAnyRole(ADMIN, MODERATOR)
                         .requestMatchers(HttpMethod.POST,
-                                "/place/filter/predicate")
+                                "/place/filter/predicate",
+                                "/notifications")
                         .hasAnyRole(ADMIN, MODERATOR)
                         .requestMatchers(HttpMethod.PUT,
                                 "/place/update/")

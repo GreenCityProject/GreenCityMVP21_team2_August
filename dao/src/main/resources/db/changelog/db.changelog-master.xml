@@ -183,7 +183,7 @@
     <include file="db/changelog/logs/ch-add-event-update_timestamp-Kapustianyk.xml"/>
     <include file="db/changelog/logs/ch-add-event-trigers-timestamp-Kapustianyk.xml"/>
     <include file="db/changelog/logs/ch-add-changes-dates_location-Kapustianyk.xml"/>
+    <include file="db/changelog/logs/ch-add-tables-notifications-and-notification-users-Fedyk.xml"/>
     <include file="db/changelog/logs/ch-add-table-news-subscriptions-Fedyk.xml"/>
-
 </databaseChangeLog>
 
