@@ -134,6 +134,8 @@ public final class ErrorMessage {
     public static final String FILTER_NOT_FOUND_BY_ID = "Filter not found";
     public static final String USER_HAS_NO_FRIEND_WITH_ID = "User has no friend with this id: ";
     public static final String INVALID_DURATION = "The duration for such habit is lower than previously set";
+    public static final String EMAIL_ALREADY_SUBSCRIBED = "Email already subscribed";
+    public static final String NEWS_SUBSCRIPTION_NOT_FOUND_BY_TOKEN = "News subscription not found by token";
 
     public static final String WRONG_COUNT_OF_EVENT_TAGS_EXCEPTION = "Count of tags should be at least one";
     public static final String EVENT_DATES_LOCATIONS_EMPTY_EXCEPTION = "Dates and locations cannot be empty";

@@ -351,7 +351,7 @@ public class RestClient {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<EcoNewsForSendEmailDto> entity = new HttpEntity<>(message, headers);
         restTemplate.exchange(greenCityUserServerAddress
-            + RestTemplateLinks.ADD_ECO_NEWS, HttpMethod.POST, entity, Object.class)
+            + RestTemplateLinks.ADD_EVENT, HttpMethod.POST, entity, Object.class)
             .getBody();
     }
 
@@ -361,9 +361,10 @@ public class RestClient {
      * @param message with information for sending email about adding new event.
      *
      */
-    public void addEvent(EventForSendEmailDto message) {
+    public void addEvent(EventForSendEmailDto message, String accessToken) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set(AUTHORIZATION, accessToken);
         HttpEntity<EventForSendEmailDto> entity = new HttpEntity<>(message, headers);
         restTemplate.exchange(greenCityUserServerAddress
                         + RestTemplateLinks.ADD_EVENT, HttpMethod.POST, entity, Object.class)

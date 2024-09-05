@@ -1,5 +1,6 @@
 package greencity.dto.event;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -24,6 +25,7 @@ public class AddEventDtoRequest {
 
     private boolean open;
 
+    @Valid
     @NotNull(message = "Dates and locations are mandatory")
     private List<DatesLocationsDto> datesLocations;
 
