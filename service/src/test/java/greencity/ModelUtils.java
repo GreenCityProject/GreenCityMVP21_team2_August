@@ -673,11 +673,12 @@ public class ModelUtils {
 
     public static NotificationReadDto getNotificationReadDto() {
         return NotificationReadDto.builder()
-            .title("New Event Created")
-            .message("A new event has been created: EVENT")
-            .projectName(ProjectName.GREEN_CITY)
-            .type(NotificationType.EVENT_CREATED)
-            .build();
+                .title("New Event Created")
+                .message("A new event has been created: EVENT")
+                .projectName(ProjectName.GREEN_CITY)
+                .type(NotificationType.EVENT_CREATED)
+                .build();
+    }
       
     public static NewsSubscriptionDto getNewsSubscriptionDto() {
         return NewsSubscriptionDto.builder()
