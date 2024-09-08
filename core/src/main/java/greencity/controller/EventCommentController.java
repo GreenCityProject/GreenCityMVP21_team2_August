@@ -30,13 +30,6 @@ import org.springframework.web.bind.annotation.*;
 public class EventCommentController {
     private final EventCommentService eventCommentService;
 
-    /**
-     * Method for creating {@link EventComment}.
-     *
-     * @param eventId id of {@link Event} to add comment to.
-     * @param request   - dto for {@link EventComment} entity.
-     * @return dto {@link EventCommentResponseDto}
-     */
     @Operation(summary = "Add comment to event.")
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiResponses(value = {
@@ -57,12 +50,6 @@ public class EventCommentController {
                 .body(eventCommentService.save(eventId, request, user));
     }
 
-    /**
-     * Method to count not deleted comments to certain {@link Event}.
-     *
-     * @param eventId to specify {@link Event}
-     * @return amount of comments
-     */
     @Operation(summary = "Count comments of event.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = HttpStatuses.OK),
@@ -73,13 +60,6 @@ public class EventCommentController {
         return eventCommentService.countOfComments(eventId);
     }
 
-    /**
-     * Method to get all not deleted comments to {@link Event} specified by
-     * eventId.
-     *
-     * @param eventId id of {@link Event}
-     * @return Pageable of {@link EventCommentResponseDto}
-     */
     @Operation(summary = "Get all comments of event.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = HttpStatuses.OK),
