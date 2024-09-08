@@ -78,4 +78,9 @@ public class FriendServiceImpl implements FriendService {
         }
         return friendDtoResponse;
     }
+
+    public int countUserFriends(Long userId) {
+        return friendRepo.countByUserId(userId);
+    }
+
 }

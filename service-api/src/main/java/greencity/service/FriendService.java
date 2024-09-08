@@ -8,4 +8,7 @@ public interface FriendService {
     PageableDto<FriendDtoResponse> getAllUserFriends(Long userId, Pageable pageable);
 
     FriendDtoResponse getFriendProfile(Long userId);
+
+    int countUserFriends(Long userId);
+
 }

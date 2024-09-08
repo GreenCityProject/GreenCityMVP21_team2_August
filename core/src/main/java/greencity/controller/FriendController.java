@@ -60,4 +60,10 @@ public class FriendController {
         return ResponseEntity.status(HttpStatus.OK).body(
                 friendService.getFriendProfile(userId));
     }
+
+    @GetMapping("/{userId}/count")
+    public ResponseEntity<Integer> getTotalFriendsCount(@PathVariable Long userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(friendService.countUserFriends(userId));
+    }
+
 }

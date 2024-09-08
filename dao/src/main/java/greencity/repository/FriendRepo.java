@@ -28,4 +28,8 @@ public interface FriendRepo  extends JpaRepository<User, Long>, JpaSpecification
             + "JOIN users_friends uf2 ON u.id = uf2.friend_id "
             + "WHERE uf1.user_id = :userId1 AND uf2.user_id = :userId2")
     List<User> findMutualFriends(@Param("userId1") Long userId1, @Param("userId2") Long userId2);
+
+   // @Query("SELECT COUNT(f) FROM User u JOIN u.friends f WHERE u.id = :userId")
+    int countByUserId(@Param("userId") Long userId);
+
 }
