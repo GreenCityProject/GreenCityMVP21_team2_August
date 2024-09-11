@@ -10,7 +10,10 @@ public interface EventCommentService {
 
     EventCommentResponseDto save(Long eventId, EventCommentRequestDto requestDto, UserVO user);
 
-    int countOfComments(Long ecoNewsId);
+    int countOfComments(Long eventId);
 
-    PageableDto<EventCommentResponseDto> getAllEventComments(Pageable pageable, Long eventId, UserVO userVO);
+    PageableDto<EventCommentResponseDto> getAllEventComments(Pageable pageable, Long eventId);
+
+    EventCommentResponseDto getByEventCommentId(Long eventId, Long commentId);
+
 }

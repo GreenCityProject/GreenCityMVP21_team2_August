@@ -11,7 +11,9 @@ import lombok.*;
 @Builder
 @EqualsAndHashCode
 public class EventCommentRequestDto {
-    @NotBlank
+    @NotBlank(message = "Comment cannot be blank")
     @Size(min = 1, max = 8000)
-    String text;
+    private String text;
+
+    private Long parentCommentId;
 }

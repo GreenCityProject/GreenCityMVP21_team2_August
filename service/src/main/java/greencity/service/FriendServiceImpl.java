@@ -80,7 +80,7 @@ public class FriendServiceImpl implements FriendService {
     }
 
     public int countUserFriends(Long userId) {
-        return friendRepo.countByUserId(userId);
+        return friendRepo.countUserById(userId);
     }
 
 }
