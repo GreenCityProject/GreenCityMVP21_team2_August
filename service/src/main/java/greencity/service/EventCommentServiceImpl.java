@@ -10,6 +10,7 @@ import greencity.dto.user.UserVO;
 import greencity.entity.Event;
 import greencity.entity.EventComment;
 import greencity.entity.User;
+import greencity.enums.CommentStatus;
 import greencity.entity.Event;
 import greencity.enums.CommentStatus;
 import greencity.exception.exceptions.BadRequestException;
@@ -22,6 +23,7 @@ import greencity.repository.EventRepository;
 import jakarta.transaction.Transactional;
 import greencity.repository.UserRepo;
 import jakarta.transaction.Transactional;
+import greencity.repository.UserRepo;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,13 +49,14 @@ public class EventCommentServiceImpl implements EventCommentService {
     private final RestClient restClient;
     private final UserRepo userRepo;
     private final UserServiceImpl userServiceImpl;
+
     private ModelMapper modelMapper;
     private final ThreadPoolExecutor emailThreadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
 
     @Override
     public EventCommentResponseDto save(Long eventId, EventCommentRequestDto requestDto, UserVO user) {
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new NotFoundException(ErrorMessage.EVENT_NOT_FOUND_BY_ID + eventId));
+                .orElseThrow(() -> new NotFoundException("Event with ID " + eventId + " not found."));
         EventComment eventComment = modelMapper.map(requestDto, EventComment.class);
         eventComment.setEvent(event);
         eventComment.setUser(modelMapper.map(user, User.class));
@@ -225,5 +228,4 @@ public class EventCommentServiceImpl implements EventCommentService {
         eventCommentRepo.save(comment);
 
     }
-
 }

@@ -1,6 +1,7 @@
 package greencity.repository;
 
 import greencity.entity.EcoNewsComment;
+import greencity.entity.EventComment;
 import greencity.entity.Event;
 import greencity.entity.EventComment;
 import greencity.enums.CommentStatus;
