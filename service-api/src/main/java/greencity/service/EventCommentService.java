@@ -17,4 +17,6 @@ public interface EventCommentService {
     EventCommentResponseDto getByEventCommentId(Long eventId, Long commentId);
 
     String delete(Long eventCommentId, String email);
+
+    void update(Long  commentId, String commentText, String email);
 }
