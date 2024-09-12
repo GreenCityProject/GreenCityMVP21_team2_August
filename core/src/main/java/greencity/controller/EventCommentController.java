@@ -12,16 +12,20 @@ import greencity.service.EventCommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @Validated
 @AllArgsConstructor
@@ -74,4 +78,25 @@ public class EventCommentController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(eventCommentService.getAllEventComments(pageable, eventId, user));
     }
+
+    @Operation(summary = "Update comment.")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = HttpStatuses.NO_CONTENT),
+            @ApiResponse(responseCode = "400", description = HttpStatuses.BAD_REQUEST,
+                    content = @Content(examples = @ExampleObject(HttpStatuses.BAD_REQUEST))),
+            @ApiResponse(responseCode = "401", description = HttpStatuses.UNAUTHORIZED,
+                    content = @Content(examples = @ExampleObject(HttpStatuses.UNAUTHORIZED))),
+            @ApiResponse(responseCode = "404", description = HttpStatuses.NOT_FOUND,
+                    content = @Content(examples = @ExampleObject(HttpStatuses.NOT_FOUND)))
+    })
+    @PatchMapping("/{eventId}/comments/{commentId}")
+    public ResponseEntity<Object> update(
+            @PathVariable Long commentId, @PathVariable Long eventId,
+            @RequestBody @Size(min = 1, max = 8000) String commentText,
+            @Parameter(hidden = true) Principal principal) {
+        eventCommentService.update(commentId, commentText, principal.getName());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }

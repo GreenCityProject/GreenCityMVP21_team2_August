@@ -1,5 +1,6 @@
 package greencity.entity;
 
+import greencity.enums.CommentStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -38,4 +39,8 @@ public class EventComment {
 
     @ManyToOne
     private EventComment parentComment;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CommentStatus commentStatus;
 }
