@@ -203,7 +203,9 @@ public class SecurityConfig {
                                 "/notifications/filter",
                                 "/notifications/unread/latest",
                                 "/notifications/countUnread",
-                                "notifications/all")
+                                "notifications/all",
+                                "/event-attendees/by-event/{eventId}",
+                                "/event-attendees/by-user/{userId}")
                         .hasAnyRole(USER, ADMIN, MODERATOR, UBS_EMPLOYEE)
                         .requestMatchers(HttpMethod.POST,
                                 "/events",
@@ -226,7 +228,8 @@ public class SecurityConfig {
                                 USER_SHOPPING_LIST,
                                 "/user/{userId}/habit",
                                 "/habit/custom",
-                                "/custom/shopping-list-items/{userId}/{habitId}/custom-shopping-list-items")
+                                "/custom/shopping-list-items/{userId}/{habitId}/custom-shopping-list-items",
+                                "/event-attendees")
                         .hasAnyRole(USER, ADMIN, MODERATOR, UBS_EMPLOYEE)
                         .requestMatchers(HttpMethod.PUT,
                                 "/habit/statistic/{id}",
@@ -251,7 +254,8 @@ public class SecurityConfig {
                                 "/user/profilePicture",
                                 "/user/deleteProfilePicture",
                                 "/notifications/unview/{notificationId}",
-                                "/notifications/view/{notificationId}")
+                                "/notifications/view/{notificationId}",
+                                "/event-attendees/{id}")
                         .hasAnyRole(USER, ADMIN, MODERATOR, UBS_EMPLOYEE)
                         .requestMatchers(HttpMethod.DELETE,
                                 ECONEWS_COMMENTS,
@@ -262,7 +266,9 @@ public class SecurityConfig {
                                 "/favorite_place/{placeId}",
                                 "/social-networks",
                                 USER_CUSTOM_SHOPPING_LIST_ITEMS,
-                                USER_SHOPPING_LIST + "/user-shopping-list-items")
+                                USER_SHOPPING_LIST + "/user-shopping-list-items",
+                                "/event-attendees/{id}",
+                                "/event-attendees/by-event/{id}")
                         .hasAnyRole(USER, ADMIN, MODERATOR, UBS_EMPLOYEE)
                         .requestMatchers(HttpMethod.GET,
                                 "/newsSubscriber",
