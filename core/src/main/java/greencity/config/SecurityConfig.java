@@ -252,6 +252,7 @@ public class SecurityConfig {
                                 USER_CUSTOM_SHOPPING_LIST_ITEMS,
                                 USER_SHOPPING_LIST + "/{shoppingListItemId}/status/{status}",
                                 USER_SHOPPING_LIST + "/{userShoppingListItemId}",
+                                "/events/{eventId}/comments/{commentId}",
                                 "/user/profilePicture",
                                 "/user/deleteProfilePicture",
                                 "/notifications/unview/{notificationId}",

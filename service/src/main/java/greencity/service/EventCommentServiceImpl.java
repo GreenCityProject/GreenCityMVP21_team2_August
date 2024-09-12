@@ -7,15 +7,19 @@ import greencity.dto.PageableDto;
 import greencity.dto.eventcomment.EventCommentRequestDto;
 import greencity.dto.eventcomment.EventCommentResponseDto;
 import greencity.dto.user.UserVO;
+import greencity.entity.Event;
 import greencity.entity.EventComment;
 import greencity.entity.User;
 import greencity.entity.Event;
 import greencity.enums.CommentStatus;
 import greencity.exception.exceptions.BadRequestException;
+import greencity.enums.CommentStatus;
 import greencity.exception.exceptions.NotFoundException;
 import greencity.dto.eventcomment.EventCommentMessageInfoDto;
+import greencity.exception.exceptions.UserHasNoPermissionToAccessException;
 import greencity.repository.EventCommentRepo;
 import greencity.repository.EventRepository;
+import jakarta.transaction.Transactional;
 import greencity.repository.UserRepo;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -41,13 +45,14 @@ public class EventCommentServiceImpl implements EventCommentService {
     private final UserService userService;
     private final RestClient restClient;
     private final UserRepo userRepo;
+    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
     private ModelMapper modelMapper;
-    private final ThreadPoolExecutor emailThreadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
 
     @Override
     public EventCommentResponseDto save(Long eventId, EventCommentRequestDto requestDto, UserVO user) {
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new NotFoundException(ErrorMessage.EVENT_NOT_FOUND_BY_ID + eventId));
+                .orElseThrow(() -> new NotFoundException("Event with ID " + eventId + " not found."));
         EventComment eventComment = modelMapper.map(requestDto, EventComment.class);
         eventComment.setEvent(event);
         eventComment.setUser(modelMapper.map(user, User.class));
@@ -181,4 +186,21 @@ public class EventCommentServiceImpl implements EventCommentService {
         }
         return mentionedUsers;
     }
+    @Transactional
+    @Override
+    public void update(Long commentId, String commentText, String email) {
+        EventComment comment = eventCommentRepo.findByIdAndCommentStatus(commentId, CommentStatus.DELETED)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.EVENT_COMMENT_NOT_FOUND_BY_Id + commentId));
+
+        UserVO userVO = userService.findByEmail(email);
+
+        if (!userVO.getId().equals(comment.getUser().getId())) {
+            throw new UserHasNoPermissionToAccessException(ErrorMessage.USER_HAS_NO_PERMISSION);
+        }
+        comment.setText(commentText);
+        comment.setCommentStatus(CommentStatus.EDITED);
+        eventCommentRepo.save(comment);
+
+    }
+
 }
