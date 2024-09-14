@@ -419,4 +419,17 @@ public class ModelUtils {
             .token("token")
             .build();
     }
+
+    public static User createUser(Long id, String email, String name, String firstName, String city) {
+        return User.builder()
+                .id(id)
+                .email(email)
+                .name(name)
+                .firstName(firstName)
+                .city(city)
+                .role(Role.ROLE_USER)
+                .lastActivityTime(LocalDateTime.now())
+                .dateOfRegistration(LocalDateTime.now())
+                .build();
+    }
 }
