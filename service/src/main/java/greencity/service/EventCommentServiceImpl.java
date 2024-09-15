@@ -49,7 +49,6 @@ public class EventCommentServiceImpl implements EventCommentService {
     private final RestClient restClient;
     private final UserRepo userRepo;
     private final UserServiceImpl userServiceImpl;
-
     private ModelMapper modelMapper;
     private final ThreadPoolExecutor emailThreadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
 
@@ -228,4 +227,5 @@ public class EventCommentServiceImpl implements EventCommentService {
         eventCommentRepo.save(comment);
 
     }
+
 }

@@ -12,6 +12,8 @@ public interface EventCommentService {
 
     int countOfComments(Long ecoNewsId);
 
+    PageableDto<EventCommentResponseDto> getAllEventComments(Pageable pageable, Long eventId);
+
     EventCommentResponseDto getByEventCommentId(Long eventId, Long commentId);
 
     String delete(Long eventCommentId, String email);

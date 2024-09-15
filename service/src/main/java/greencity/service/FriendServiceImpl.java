@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,7 +80,8 @@ public class FriendServiceImpl implements FriendService {
         return friendDtoResponse;
     }
 
-    public int countUserFriends(Long userId) {
+    @Override
+    public int countUserById(Long userId) {
         return friendRepo.countUserById(userId);
     }
 
