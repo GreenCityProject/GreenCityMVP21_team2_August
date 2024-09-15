@@ -1,6 +1,5 @@
 package greencity.repository;
 
-import greencity.entity.EcoNewsComment;
 import greencity.entity.EventComment;
 import greencity.entity.Event;
 import greencity.enums.CommentStatus;
@@ -18,6 +17,6 @@ public interface EventCommentRepo extends JpaRepository<EventComment, Long> {
 
     Optional<EventComment> findByIdAndStatusNot(Long id, CommentStatus status);
 
-    Optional<EventComment> findByIdAndCommentStatus(Long id, CommentStatus commentStatus);
+
 
 }

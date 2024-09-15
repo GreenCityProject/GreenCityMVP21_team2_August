@@ -1,6 +1,5 @@
 package greencity.service;
 
-import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import greencity.client.RestClient;
 import greencity.constant.ErrorMessage;
 import greencity.dto.PageableDto;
@@ -10,10 +9,8 @@ import greencity.dto.user.UserVO;
 import greencity.entity.Event;
 import greencity.entity.EventComment;
 import greencity.entity.User;
-import greencity.entity.Event;
 import greencity.enums.CommentStatus;
 import greencity.exception.exceptions.BadRequestException;
-import greencity.enums.CommentStatus;
 import greencity.exception.exceptions.NotFoundException;
 import greencity.dto.eventcomment.EventCommentMessageInfoDto;
 import greencity.exception.exceptions.UserHasNoPermissionToAccessException;
@@ -23,7 +20,6 @@ import jakarta.transaction.Transactional;
 import greencity.repository.UserRepo;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -46,7 +42,7 @@ public class EventCommentServiceImpl implements EventCommentService {
     private final RestClient restClient;
     private final UserRepo userRepo;
     private final UserServiceImpl userServiceImpl;
-    private final UserService userService;
+    private final ThreadPoolExecutor emailThreadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
     private ModelMapper modelMapper;
 
     @Override
@@ -166,6 +162,8 @@ public class EventCommentServiceImpl implements EventCommentService {
         return modelMapper.map(eventComment, EventCommentResponseDto.class);
     }
 
+
+
     private Set<User> mentionedUsers(String commentText) {
         Set<User> mentionedUsers = new HashSet<>();
         if (commentText.contains("@") || commentText.contains("#")) {
@@ -186,10 +184,12 @@ public class EventCommentServiceImpl implements EventCommentService {
         }
         return mentionedUsers;
     }
+
+
     @Transactional
     @Override
     public void update(Long commentId, String commentText, String email) {
-        EventComment comment = eventCommentRepo.findByIdAndCommentStatus(commentId, CommentStatus.DELETED)
+        EventComment comment = eventCommentRepo.findByIdAndStatusNot(commentId, CommentStatus.DELETED)
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.EVENT_COMMENT_NOT_FOUND_BY_Id + commentId));
 
         UserVO userVO = userService.findByEmail(email);
@@ -198,7 +198,7 @@ public class EventCommentServiceImpl implements EventCommentService {
             throw new UserHasNoPermissionToAccessException(ErrorMessage.USER_HAS_NO_PERMISSION);
         }
         comment.setText(commentText);
-        comment.setCommentStatus(CommentStatus.EDITED);
+        comment.setStatus(CommentStatus.EDITED);
         eventCommentRepo.save(comment);
 
     }

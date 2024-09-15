@@ -12,9 +12,10 @@ public interface EventCommentService {
 
     int countOfComments(Long ecoNewsId);
 
+    PageableDto<EventCommentResponseDto> getAllEventComments(Pageable pageable, Long eventId);
+
     EventCommentResponseDto getByEventCommentId(Long eventId, Long commentId);
 
-    PageableDto<EventCommentResponseDto> getAllEventComments(Pageable pageable, Long eventId, UserVO userVO);
 
     void update(Long  commentId, String commentText, String email);
 }
