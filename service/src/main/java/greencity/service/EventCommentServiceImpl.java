@@ -14,9 +14,11 @@ import greencity.enums.CommentStatus;
 import greencity.exception.exceptions.BadRequestException;
 import greencity.exception.exceptions.NotFoundException;
 import greencity.dto.eventcomment.EventCommentMessageInfoDto;
+import greencity.exception.exceptions.UserHasNoPermissionToAccessException;
 import greencity.repository.EventCommentRepo;
 import greencity.repository.EventRepository;
 import greencity.repository.UserRepo;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -180,5 +182,27 @@ public class EventCommentServiceImpl implements EventCommentService {
                     .map(Optional::get).collect(Collectors.toSet());
         }
         return mentionedUsers;
+    }
+
+    @Transactional
+    @Override
+    public String delete(Long eventCommentId, String email) {
+        EventComment eventComment = eventCommentRepo.findByIdAndStatusNot(eventCommentId, CommentStatus.DELETED)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.EVENT_COMMENT_NOT_FOUND_BY_ID + eventCommentId));
+
+        UserVO currentUser = restClient.findByEmail(email);
+
+        if (!currentUser.getId().equals(eventComment.getUser().getId())) {
+            throw new UserHasNoPermissionToAccessException(ErrorMessage.USER_HAS_NO_PERMISSION);
+        }
+
+        eventComment.setStatus(CommentStatus.DELETED);
+        if (eventComment.getComments() != null) {
+            eventComment.getComments()
+                    .forEach(comment -> comment.setStatus(CommentStatus.DELETED));
+        }
+
+        eventCommentRepo.save(eventComment);
+        return "Comment deleted successfully";
     }
 }

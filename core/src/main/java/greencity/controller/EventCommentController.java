@@ -13,6 +13,7 @@ import greencity.service.EventCommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -26,6 +27,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -102,5 +104,21 @@ public class EventCommentController {
             @PathVariable Long commentId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(eventCommentService.getByEventCommentId(eventId, commentId));
+    }
+
+    @Operation(summary = "Delete comment")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = HttpStatuses.OK),
+            @ApiResponse(responseCode = "401", description = HttpStatuses.UNAUTHORIZED,
+                    content = @Content(examples = @ExampleObject(HttpStatuses.UNAUTHORIZED))),
+            @ApiResponse(responseCode = "404", description = HttpStatuses.NOT_FOUND,
+                    content = @Content(examples = @ExampleObject(HttpStatuses.NOT_FOUND)))
+    })
+
+    @DeleteMapping("/{eventCommentId}")
+    public ResponseEntity<Object> delete(
+            @PathVariable Long eventCommentId,
+            @Parameter(hidden = true) Principal principal) {
+        return ResponseEntity.status(HttpStatus.OK).body(eventCommentService.delete(eventCommentId, principal.getName()));
     }
 }
