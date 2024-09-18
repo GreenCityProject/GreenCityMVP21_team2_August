@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
 import java.security.Principal;
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,7 +39,6 @@ import java.util.List;
 @RequestMapping("/events/{eventId}/comments")
 public class EventCommentController {
     private final EventCommentService eventCommentService;
-
 
     @Operation(summary = "Add comment to an event.")
     @ResponseStatus(value = HttpStatus.CREATED)

@@ -7,7 +7,6 @@ import greencity.dto.PageableDto;
 import greencity.dto.eventcomment.EventCommentRequestDto;
 import greencity.dto.eventcomment.EventCommentResponseDto;
 import greencity.dto.user.UserVO;
-import greencity.entity.Event;
 import greencity.entity.EventComment;
 import greencity.entity.User;
 import greencity.enums.CommentStatus;
@@ -20,6 +19,7 @@ import greencity.dto.eventcomment.EventCommentMessageInfoDto;
 import greencity.exception.exceptions.UserHasNoPermissionToAccessException;
 import greencity.repository.EventCommentRepo;
 import greencity.repository.EventRepository;
+import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional;
 import greencity.repository.UserRepo;
 import jakarta.transaction.Transactional;
@@ -48,14 +48,13 @@ public class EventCommentServiceImpl implements EventCommentService {
     private final UserService userService;
     private final RestClient restClient;
     private final UserRepo userRepo;
-    private final UserServiceImpl userServiceImpl;
     private ModelMapper modelMapper;
     private final ThreadPoolExecutor emailThreadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
 
     @Override
     public EventCommentResponseDto save(Long eventId, EventCommentRequestDto requestDto, UserVO user) {
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new NotFoundException("Event with ID " + eventId + " not found."));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.EVENT_NOT_FOUND_BY_ID + eventId));
         EventComment eventComment = modelMapper.map(requestDto, EventComment.class);
         eventComment.setEvent(event);
         eventComment.setUser(modelMapper.map(user, User.class));
@@ -169,6 +168,8 @@ public class EventCommentServiceImpl implements EventCommentService {
         return modelMapper.map(eventComment, EventCommentResponseDto.class);
     }
 
+
+
     private Set<User> mentionedUsers(String commentText) {
         Set<User> mentionedUsers = new HashSet<>();
         if (commentText.contains("@") || commentText.contains("#")) {
@@ -211,10 +212,14 @@ public class EventCommentServiceImpl implements EventCommentService {
         eventCommentRepo.save(eventComment);
         return "Comment deleted successfully";
     }
+
+
+
+
     @Transactional
     @Override
     public void update(Long commentId, String commentText, String email) {
-        EventComment comment = eventCommentRepo.findByIdAndCommentStatus(commentId, CommentStatus.DELETED)
+        EventComment comment = eventCommentRepo.findByIdAndStatusNot(commentId, CommentStatus.DELETED)
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.EVENT_COMMENT_NOT_FOUND_BY_Id + commentId));
 
         UserVO userVO = userService.findByEmail(email);
@@ -223,7 +228,7 @@ public class EventCommentServiceImpl implements EventCommentService {
             throw new UserHasNoPermissionToAccessException(ErrorMessage.USER_HAS_NO_PERMISSION);
         }
         comment.setText(commentText);
-        comment.setCommentStatus(CommentStatus.EDITED);
+        comment.setStatus(CommentStatus.EDITED);
         eventCommentRepo.save(comment);
 
     }
