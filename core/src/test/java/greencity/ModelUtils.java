@@ -16,6 +16,7 @@ import greencity.dto.habittranslation.HabitTranslationDto;
 import greencity.dto.language.LanguageDTO;
 import greencity.dto.language.LanguageTranslationDTO;
 import greencity.dto.language.LanguageVO;
+import greencity.dto.newssubscription.NewsSubscriptionDto;
 import greencity.dto.shoppinglistitem.CustomShoppingListItemResponseDto;
 import greencity.dto.shoppinglistitem.ShoppingListItemPostDto;
 import greencity.dto.shoppinglistitem.ShoppingListItemRequestDto;
@@ -396,4 +397,39 @@ public class ModelUtils {
             .build();
     }
 
+    public static Notification getNotification() {
+        return Notification.builder()
+                .title("Notification")
+                .message("Message")
+                .viewed(false)
+                .type(NotificationType.EVENT_CREATED)
+                .projectName(ProjectName.GREEN_CITY)
+                .build();
+    }
+  
+    public static NewsSubscriptionDto getNewsSubscriptionDtoForRequest() {
+        return NewsSubscriptionDto.builder()
+            .email("email@gmail.com")
+            .build();
+    }
+
+    public static NewsSubscription getNewsSubscription() {
+        return NewsSubscription.builder()
+            .email("email@gmail.com")
+            .token("token")
+            .build();
+    }
+
+    public static User createUser(Long id, String email, String name, String firstName, String city) {
+        return User.builder()
+                .id(id)
+                .email(email)
+                .name(name)
+                .firstName(firstName)
+                .city(city)
+                .role(Role.ROLE_USER)
+                .lastActivityTime(LocalDateTime.now())
+                .dateOfRegistration(LocalDateTime.now())
+                .build();
+    }
 }
