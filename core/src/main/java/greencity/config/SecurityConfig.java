@@ -160,6 +160,7 @@ public class SecurityConfig {
                                 "/events/{eventId}/comments/{commentId}/replies")
 
                         .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/econews").permitAll()
                         .requestMatchers(HttpMethod.POST,
                                 "/ownSecurity/signUp",
                                 "/ownSecurity/signIn",
