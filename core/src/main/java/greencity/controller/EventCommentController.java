@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
 import java.security.Principal;
-import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -137,11 +136,60 @@ public class EventCommentController {
     })
     @PatchMapping("/{commentId}")
     public ResponseEntity<Object> update(
-            @PathVariable Long commentId, @PathVariable Long eventId,
+            @PathVariable Long commentId,
             @RequestBody @Size(min = 1, max = 8000) String commentText,
             @Parameter(hidden = true) Principal principal) {
         eventCommentService.update(commentId, commentText, principal.getName());
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @Operation(summary = "Reply to a comment on an event.")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = HttpStatuses.CREATED,
+                    content = @Content(schema = @Schema(implementation = EventCommentResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(responseCode = "401", description = HttpStatuses.UNAUTHORIZED),
+            @ApiResponse(responseCode = "404", description = HttpStatuses.NOT_FOUND)
+    })
+    @PostMapping("/{commentId}/reply")
+    public ResponseEntity<EventCommentResponseDto> reply(
+            @PathVariable Long eventId,
+            @PathVariable Long commentId,
+            @Valid @RequestBody EventCommentRequestDto request,
+            @Parameter(hidden = true) @CurrentUser UserVO user) {
+
+        EventCommentResponseDto responseDto = eventCommentService.reply(eventId, commentId, request, user);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(responseDto);
+    }
+
+    @Operation(summary = "Count comments of an event.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = HttpStatuses.OK),
+            @ApiResponse(responseCode = "404", description = HttpStatuses.NOT_FOUND)
+    })
+    @GetMapping("/{commentId}/replies/count")
+    public int getCountOfReplies(@PathVariable Long eventId,
+                                 @PathVariable Long commentId) {
+        return eventCommentService.countOfReplies(commentId);
+    }
+
+    @Operation(summary = "Get all replies to a specific comment with pagination.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = HttpStatuses.OK),
+            @ApiResponse(responseCode = "400", description = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(responseCode = "404", description = HttpStatuses.NOT_FOUND)
+    })
+    @GetMapping("/{commentId}/replies")
+    @ApiPageableWithoutSort
+    public ResponseEntity<PageableDto<EventCommentResponseDto>> getAllCommentReplies(
+            @PathVariable Long eventId,
+            @PathVariable Long commentId,
+            @Parameter(hidden = true) Pageable pageable) {
+        PageableDto<EventCommentResponseDto> replies = eventCommentService.getAllCommentsReplies(commentId, eventId, pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(replies);
     }
 
 }

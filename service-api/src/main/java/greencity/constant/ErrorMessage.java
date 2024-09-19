@@ -148,6 +148,7 @@ public final class ErrorMessage {
     public static final String NOTIFICATION_NOT_FOUND = "Notification not found";
     public static final String EVENT_NOT_FOUND_BY_ID = "Event doesn't exist by this id: ";
     public static final String EVENT_COMMENT_NOT_FOUND_BY_ID = "Event comment doesn't exist by this id: ";
+    public static final String CANNOT_HAVE_REPLIES ="Event comment cannot have replies";
 
     private ErrorMessage() {
     }

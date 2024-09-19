@@ -19,4 +19,12 @@ public interface EventCommentService {
     String delete(Long eventCommentId, String email);
 
     void update(Long  commentId, String commentText, String email);
+
+    EventCommentResponseDto reply(Long eventId, Long commentId, EventCommentRequestDto request, UserVO user);
+
+    int countOfReplies(Long commentId);
+
+    PageableDto<EventCommentResponseDto> getAllCommentsReplies(Long commentId,Long eventId,Pageable pageable);
+
+
 }

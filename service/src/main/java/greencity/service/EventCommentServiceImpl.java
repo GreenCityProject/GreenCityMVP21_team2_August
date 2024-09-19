@@ -1,32 +1,25 @@
 package greencity.service;
 
-import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import greencity.client.RestClient;
 import greencity.constant.ErrorMessage;
 import greencity.dto.PageableDto;
+import greencity.dto.eventcomment.EventCommentMessageInfoDto;
 import greencity.dto.eventcomment.EventCommentRequestDto;
 import greencity.dto.eventcomment.EventCommentResponseDto;
 import greencity.dto.user.UserVO;
+import greencity.entity.Event;
 import greencity.entity.EventComment;
 import greencity.entity.User;
 import greencity.enums.CommentStatus;
-import greencity.entity.Event;
-import greencity.enums.CommentStatus;
 import greencity.exception.exceptions.BadRequestException;
-import greencity.enums.CommentStatus;
 import greencity.exception.exceptions.NotFoundException;
-import greencity.dto.eventcomment.EventCommentMessageInfoDto;
 import greencity.exception.exceptions.UserHasNoPermissionToAccessException;
 import greencity.repository.EventCommentRepo;
 import greencity.repository.EventRepository;
-import jakarta.transaction.Transactional;
-import jakarta.transaction.Transactional;
 import greencity.repository.UserRepo;
 import jakarta.transaction.Transactional;
-import greencity.repository.UserRepo;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -214,8 +207,6 @@ public class EventCommentServiceImpl implements EventCommentService {
     }
 
 
-
-
     @Transactional
     @Override
     public void update(Long commentId, String commentText, String email) {
@@ -233,4 +224,58 @@ public class EventCommentServiceImpl implements EventCommentService {
 
     }
 
+    @Override
+    public EventCommentResponseDto reply(Long eventId, Long commentId, EventCommentRequestDto requestDto, UserVO user) {
+        EventComment parentComment = eventCommentRepo.findById(commentId)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.EVENT_COMMENT_NOT_FOUND_BY_Id + commentId));
+
+        if (parentComment.getParentComment() != null) {
+            throw new BadRequestException(ErrorMessage.CANNOT_REPLY_THE_REPLY);
+        }
+
+        Event event = parentComment.getEvent();
+
+        EventComment replyComment = modelMapper.map(requestDto, EventComment.class);
+
+        replyComment.setEvent(event);
+        replyComment.setUser(modelMapper.map(user, User.class));
+        replyComment.setParentComment(parentComment);
+        replyComment.setStatus(CommentStatus.ORIGINAL);
+
+        Set<User> mentionedUsers = mentionedUsers(requestDto.getText());
+        replyComment.setMentionedUsers(mentionedUsers);
+
+        replyComment = eventCommentRepo.save(replyComment);
+        sendNotifications(replyComment, event, replyComment.getUser());
+
+        return modelMapper.map(replyComment, EventCommentResponseDto.class);
+
+
+    }
+    @Override
+    public int countOfReplies(Long commentId) {
+        return eventCommentRepo.countReplies(commentId);
+    }
+
+    @Override
+    public PageableDto<EventCommentResponseDto> getAllCommentsReplies(Long commentId, Long eventId, Pageable pageable) {
+        EventComment parentComment = eventCommentRepo.findByIdAndEventId(commentId, eventId)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.EVENT_COMMENT_NOT_FOUND_BY_Id + commentId));
+
+        if (parentComment.getParentComment() != null) {
+            throw new BadRequestException(ErrorMessage.CANNOT_HAVE_REPLIES);
+        }
+
+        Page<EventComment> repliesPage = eventCommentRepo.findAllByParentComment(parentComment, pageable);
+
+        List<EventCommentResponseDto> replyDtos = repliesPage.getContent().stream()
+                .map(reply -> modelMapper.map(reply, EventCommentResponseDto.class))
+                .collect(Collectors.toList());
+
+        return new PageableDto<>(
+                replyDtos,
+                repliesPage.getTotalElements(),
+                repliesPage.getPageable().getPageNumber(),
+                repliesPage.getTotalPages());
+    }
 }

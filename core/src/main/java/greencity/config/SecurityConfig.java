@@ -154,8 +154,11 @@ public class SecurityConfig {
                                 "/user/{userId}/habit/assign",
                                 "/token",
                                 "/events/{eventId}/comments/count",
+                                "/events/{eventId}/comments/{commentId}/replies/count",
                                 "/events/{eventId}/comments",
-                                "/events/{eventId}/comments/{commentId}")
+                                "/events/{eventId}/comments/{commentId}",
+                                "/events/{eventId}/comments/{commentId}/replies")
+
                         .permitAll()
                         .requestMatchers(HttpMethod.POST,
                                 "/ownSecurity/signUp",
@@ -230,7 +233,8 @@ public class SecurityConfig {
                                 "/user/{userId}/habit",
                                 "/habit/custom",
                                 "/custom/shopping-list-items/{userId}/{habitId}/custom-shopping-list-items",
-                                "/events/{eventId}/comments")
+                                "/events/{eventId}/comments",
+                                "/events/{eventId}/comments/{commentId}/reply")
                         .hasAnyRole(USER, ADMIN, MODERATOR, UBS_EMPLOYEE)
                         .requestMatchers(HttpMethod.PUT,
                                 "/habit/statistic/{id}",
