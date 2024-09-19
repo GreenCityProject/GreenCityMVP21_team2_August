@@ -64,20 +64,32 @@ public class EcoNewsController {
      */
     @Operation(summary = "Add new eco news.")
     @ResponseStatus(value = HttpStatus.CREATED)
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = HttpStatuses.CREATED,
-                    content = @Content(schema = @Schema(implementation = EcoNewsGenericDto.class))),
-            @ApiResponse(responseCode = "401", description = HttpStatuses.UNAUTHORIZED)
+    @ApiResponses(value = {@ApiResponse(responseCode = "201", description = HttpStatuses.CREATED,
+            content = @Content(schema = @Schema(implementation = EcoNewsGenericDto.class))),
+            @ApiResponse(responseCode = "400", description = HttpStatuses.BAD_REQUEST)
     })
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<EcoNewsGenericDto> save(
+    public ResponseEntity<?> save(
             @Parameter(description = SwaggerExampleModel.ADD_ECO_NEWS_REQUEST,
-                    required = true) @RequestPart @ValidEcoNewsDtoRequest AddEcoNewsDtoRequest addEcoNewsDtoRequest,
+                    required = true) @RequestPart @Valid AddEcoNewsDtoRequest addEcoNewsDtoRequest,
             @Parameter(description = "Image of eco news") @ImageValidation
             @RequestPart(required = false) MultipartFile image,
             @Parameter(hidden = true) Principal principal) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(
-                ecoNewsService.saveEcoNews(addEcoNewsDtoRequest, image, principal.getName()));
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        if (addEcoNewsDtoRequest.getTitle() == null || addEcoNewsDtoRequest.getText() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Title and text cannot be null");
+        }
+
+        try {
+            EcoNewsGenericDto savedEcoNews = ecoNewsService.saveEcoNews(addEcoNewsDtoRequest, image, principal.getName());
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedEcoNews);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     /**

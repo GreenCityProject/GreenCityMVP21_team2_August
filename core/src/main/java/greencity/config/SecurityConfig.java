@@ -154,6 +154,7 @@ public class SecurityConfig {
                                 "/user/{userId}/habit/assign",
                                 "/token")
                         .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/econews").permitAll()
                         .requestMatchers(HttpMethod.POST,
                                 "/ownSecurity/signUp",
                                 "/ownSecurity/signIn",
