@@ -11,6 +11,10 @@ public interface FriendService {
 
     FriendDtoResponse getFriendProfile(Long userId);
 
+
+    int countUserFriends(Long userId);
+
+
     List<FriendDtoResponse> searchNewFriends(Long userId, String searchTerm);
 
     void sendFriendRequest(Long userId, Long friendId);
@@ -32,4 +36,5 @@ public interface FriendService {
     int countFriendsByUserId(Long userId);
 
     List<FriendDtoResponse> getAllUserFriendsByCityHabitCommonFriends(Long userId);
+
 }

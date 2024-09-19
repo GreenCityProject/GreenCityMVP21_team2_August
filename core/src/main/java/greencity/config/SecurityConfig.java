@@ -152,7 +152,10 @@ public class SecurityConfig {
                                 "/user/emailNotifications",
                                 "/user/activatedUsersAmount",
                                 "/user/{userId}/habit/assign",
-                                "/token")
+                                "/token",
+                                "/events/{eventId}/comments/count",
+                                "/events/{eventId}/comments",
+                                "/events/{eventId}/comments/{commentId}")
                         .permitAll()
                         .requestMatchers(HttpMethod.POST, "/econews").permitAll()
                         .requestMatchers(HttpMethod.POST,
@@ -227,7 +230,8 @@ public class SecurityConfig {
                                 USER_SHOPPING_LIST,
                                 "/user/{userId}/habit",
                                 "/habit/custom",
-                                "/custom/shopping-list-items/{userId}/{habitId}/custom-shopping-list-items")
+                                "/custom/shopping-list-items/{userId}/{habitId}/custom-shopping-list-items",
+                                "/events/{eventId}/comments")
                         .hasAnyRole(USER, ADMIN, MODERATOR, UBS_EMPLOYEE)
                         .requestMatchers(HttpMethod.PUT,
                                 "/habit/statistic/{id}",
@@ -256,7 +260,7 @@ public class SecurityConfig {
                         .hasAnyRole(USER, ADMIN, MODERATOR, UBS_EMPLOYEE)
                         .requestMatchers(HttpMethod.DELETE,
                                 ECONEWS_COMMENTS,
-                                "/events/comments/{eventCommentId}",
+                                "/events/{eventId}/comments/{commentId}",
                                 "/econews/{econewsId}",
                                 CUSTOM_SHOPPING_LIST_ITEMS,
                                 CUSTOM_SHOPPING_LIST_URL,

@@ -30,6 +30,11 @@ public interface FriendRepo  extends JpaRepository<User, Long>, JpaSpecification
             + "WHERE uf1.user_id = :userId1 AND uf2.user_id = :userId2")
     List<User> findMutualFriends(@Param("userId1") Long userId1, @Param("userId2") Long userId2);
 
+
+   // @Query("SELECT COUNT(f) FROM User u JOIN u.friends f WHERE u.id = :userId")
+    int countUserById(@Param("userId") Long userId);
+
+
     @Query(nativeQuery = true, value = "SELECT u.* "
             + "FROM users u "
             + "WHERE (u.name LIKE :searchTerm OR u.first_name LIKE :searchTerm)"
@@ -104,4 +109,5 @@ public interface FriendRepo  extends JpaRepository<User, Long>, JpaSpecification
             + "AND u.id != :userId "
             + "AND h.status = 'INPROGRESS' OR h.status = 'ACQUIRED'")
     List<User> getAllFriendsByCityHabitCommonFriends(@Param("userId") Long userId);
+
 }

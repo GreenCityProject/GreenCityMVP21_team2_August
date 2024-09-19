@@ -60,6 +60,13 @@ public class FriendController {
                 friendService.getFriendProfile(userId));
     }
 
+
+    @GetMapping("/{userId}/count")
+    public ResponseEntity<Integer> getTotalFriendsCount(@PathVariable Long userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(friendService.countUserFriends(userId));
+    }
+
+
     @Operation(summary = "Search for new friends by user ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = HttpStatuses.OK),
@@ -203,4 +210,5 @@ public class FriendController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(friendService.getAllUserFriendsByCityHabitCommonFriends(userId));
     }
+
 }
