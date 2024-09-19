@@ -158,7 +158,6 @@ public class SecurityConfig {
                                 "/events/{eventId}/comments",
                                 "/events/{eventId}/comments/{commentId}",
                                 "/events/{eventId}/comments/{commentId}/replies")
-
                         .permitAll()
                         .requestMatchers(HttpMethod.POST, "/econews").permitAll()
                         .requestMatchers(HttpMethod.POST,

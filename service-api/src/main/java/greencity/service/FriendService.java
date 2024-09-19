@@ -13,7 +13,6 @@ public interface FriendService {
 
     int countUserById(Long userId);
 
-
     List<FriendDtoResponse> searchNewFriends(Long userId, String searchTerm);
 
     void sendFriendRequest(Long userId, Long friendId);

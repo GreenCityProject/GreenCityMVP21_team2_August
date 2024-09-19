@@ -26,5 +26,4 @@ public interface EventCommentService {
 
     PageableDto<EventCommentResponseDto> getAllCommentsReplies(Long commentId,Long eventId,Pageable pageable);
 
-
 }

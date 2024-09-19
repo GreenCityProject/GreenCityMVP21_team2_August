@@ -189,5 +189,6 @@
     <include file="db/changelog/logs/ch-users-friends-Kapustianyk.xml"/>
     <include file="db/changelog/logs/change-status-column-type-Kapustianyk.xml"/>
     <include file="db/changelog/logs/ch-remove-created-date-column-Kapustianyk.xml"/>
+
 </databaseChangeLog>
 

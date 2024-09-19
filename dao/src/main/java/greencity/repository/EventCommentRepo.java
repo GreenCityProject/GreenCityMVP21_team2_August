@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+
 import java.util.Optional;
 
 public interface EventCommentRepo extends JpaRepository<EventComment, Long> {
@@ -25,6 +26,5 @@ public interface EventCommentRepo extends JpaRepository<EventComment, Long> {
     Optional<EventComment> findByIdAndEventId(Long commentId, Long eventId);
 
     Page<EventComment> findAllByParentComment(EventComment parentComment, Pageable pageable);
-
 
 }

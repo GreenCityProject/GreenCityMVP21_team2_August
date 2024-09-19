@@ -1,18 +1,20 @@
 package greencity.service;
 
+
+import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import greencity.client.RestClient;
 import greencity.constant.ErrorMessage;
 import greencity.dto.PageableDto;
-import greencity.dto.eventcomment.EventCommentMessageInfoDto;
 import greencity.dto.eventcomment.EventCommentRequestDto;
 import greencity.dto.eventcomment.EventCommentResponseDto;
 import greencity.dto.user.UserVO;
-import greencity.entity.Event;
 import greencity.entity.EventComment;
 import greencity.entity.User;
+import greencity.entity.Event;
 import greencity.enums.CommentStatus;
 import greencity.exception.exceptions.BadRequestException;
 import greencity.exception.exceptions.NotFoundException;
+import greencity.dto.eventcomment.EventCommentMessageInfoDto;
 import greencity.exception.exceptions.UserHasNoPermissionToAccessException;
 import greencity.repository.EventCommentRepo;
 import greencity.repository.EventRepository;
@@ -20,6 +22,7 @@ import greencity.repository.UserRepo;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -160,7 +163,6 @@ public class EventCommentServiceImpl implements EventCommentService {
         }
         return modelMapper.map(eventComment, EventCommentResponseDto.class);
     }
-
 
 
     private Set<User> mentionedUsers(String commentText) {
