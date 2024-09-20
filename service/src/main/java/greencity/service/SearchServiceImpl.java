@@ -1,6 +1,7 @@
 package greencity.service;
 
 import greencity.dto.PageableDto;
+import greencity.dto.search.SearchEventsDto;
 import greencity.dto.search.SearchNewsDto;
 import greencity.dto.search.SearchResponseDto;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class SearchServiceImpl implements SearchService {
     private final EcoNewsService ecoNewsService;
+    private final EventService eventService;
 
     /**
      * Method that allow you to search {@link SearchResponseDto}.
@@ -34,5 +36,10 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public PageableDto<SearchNewsDto> searchAllNews(Pageable pageable, String searchQuery, String languageCode) {
         return ecoNewsService.search(pageable, searchQuery, languageCode);
+    }
+
+    @Override
+    public PageableDto<SearchEventsDto> searchAllEvents(Pageable pageable, String searchQuery) {
+        return eventService.search(pageable, searchQuery);
     }
 }

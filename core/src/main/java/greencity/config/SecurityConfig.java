@@ -149,6 +149,7 @@ public class SecurityConfig {
                                 "/language",
                                 "/search",
                                 "/search/econews",
+                                "/search/events",
                                 "/user/emailNotifications",
                                 "/user/activatedUsersAmount",
                                 "/user/{userId}/habit/assign",

@@ -1,10 +1,13 @@
 package greencity.service;
 
+import greencity.dto.PageableDto;
 import greencity.dto.event.AddEventDtoRequest;
 import greencity.dto.event.AddEventDtoResponse;
 import greencity.dto.event.EventVO;
 import greencity.dto.event.UpdateEventDTO;
+import greencity.dto.search.SearchEventsDto;
 import greencity.dto.user.UserVO;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -33,4 +36,12 @@ public interface EventService {
      * @param user current {@link UserVO} that wants to delete.
      */
     void delete(Long id, UserVO user);
+
+    /**
+     * Method for search events {@link SearchEventsDto} by name.
+     *
+     * @param pageable {@link Pageable}.
+     * @param query search query.
+     */
+    PageableDto<SearchEventsDto> search (Pageable pageable, String query);
 }

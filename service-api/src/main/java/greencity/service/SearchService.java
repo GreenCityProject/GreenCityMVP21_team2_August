@@ -3,6 +3,7 @@ package greencity.service;
 import greencity.dto.PageableDto;
 import greencity.dto.search.SearchNewsDto;
 import greencity.dto.search.SearchResponseDto;
+import greencity.dto.search.SearchEventsDto;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -28,4 +29,13 @@ public interface SearchService {
      * @return PageableDto of {@link SearchNewsDto} instances.
      */
     PageableDto<SearchNewsDto> searchAllNews(Pageable pageable, String searchQuery, String languageCode);
+
+    /**
+     * Method that allow to search Events {@link SearchEventsDto}
+     *
+     * @param pageable    {@link Pageable}.
+     * @param searchQuery query to search.
+     * @return PageableDto of {@link SearchEventsDto} instances.
+     */
+    PageableDto<SearchEventsDto> searchAllEvents(Pageable pageable, String searchQuery);
 }
