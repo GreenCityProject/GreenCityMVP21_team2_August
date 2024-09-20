@@ -154,8 +154,10 @@ public class SecurityConfig {
                                 "/user/{userId}/habit/assign",
                                 "/token",
                                 "/events/{eventId}/comments/count",
+                                "/events/{eventId}/comments/{commentId}/replies/count",
                                 "/events/{eventId}/comments",
-                                "/events/{eventId}/comments/{commentId}")
+                                "/events/{eventId}/comments/{commentId}",
+                                "/events/{eventId}/comments/{commentId}/replies")
                         .permitAll()
                         .requestMatchers(HttpMethod.POST, "/econews").permitAll()
                         .requestMatchers(HttpMethod.POST,
@@ -233,8 +235,11 @@ public class SecurityConfig {
                                 "/user/{userId}/habit",
                                 "/habit/custom",
                                 "/custom/shopping-list-items/{userId}/{habitId}/custom-shopping-list-items",
+                                "/events/{eventId}/comments",
                                 "/event-attendees",
-                                "/events/{eventId}/comments")
+                                "/events/{eventId}/comments/{commentId}/reply")
+                          
+          
                         .hasAnyRole(USER, ADMIN, MODERATOR, UBS_EMPLOYEE)
                         .requestMatchers(HttpMethod.PUT,
                                 "/habit/statistic/{id}",
@@ -256,6 +261,7 @@ public class SecurityConfig {
                                 USER_CUSTOM_SHOPPING_LIST_ITEMS,
                                 USER_SHOPPING_LIST + "/{shoppingListItemId}/status/{status}",
                                 USER_SHOPPING_LIST + "/{userShoppingListItemId}",
+                                "/events/{eventId}/comments/{commentId}",
                                 "/user/profilePicture",
                                 "/user/deleteProfilePicture",
                                 "/notifications/unview/{notificationId}",

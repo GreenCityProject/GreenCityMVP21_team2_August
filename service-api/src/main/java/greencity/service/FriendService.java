@@ -11,9 +11,7 @@ public interface FriendService {
 
     FriendDtoResponse getFriendProfile(Long userId);
 
-
-    int countUserFriends(Long userId);
-
+    int countUserById(Long userId);
 
     List<FriendDtoResponse> searchNewFriends(Long userId, String searchTerm);
 

@@ -141,6 +141,7 @@ public final class ErrorMessage {
     public static final String EVENT_DATES_LOCATIONS_EMPTY_EXCEPTION = "Dates and locations cannot be empty";
     public static final String INVALID_EVENT_LINK_EXCEPTION = "Please add a link to the event. The link must start with http(s)://";
     public static final String EVENT_TITLE_MANDATORY_EXCEPTION = "Title is mandatory";
+    public static final String EVENT_COMMENT_NOT_FOUND_BY_Id = "Event comment not found";
     public static final String EVENT_TITLE_LENGTH_EXCEPTION = "Title cannot exceed 70 characters";
     public static final String EVENT_DESCRIPTION_MANDATORY_EXCEPTION = "Description is mandatory";
     public static final String EVENT_DESCRIPTION_LENGTH_EXCEPTION = "Description must be between 20 and 63,206 characters";
@@ -149,6 +150,7 @@ public final class ErrorMessage {
     public static final String EVENT_CLOSE = "The event is closed";
     public static final String EVENT_NOT_FOUND_BY_ID = "Event doesn't exist by this id: ";
     public static final String EVENT_COMMENT_NOT_FOUND_BY_ID = "Event comment doesn't exist by this id: ";
+    public static final String CANNOT_HAVE_REPLIES ="Event comment cannot have replies";
 
     private ErrorMessage() {
     }

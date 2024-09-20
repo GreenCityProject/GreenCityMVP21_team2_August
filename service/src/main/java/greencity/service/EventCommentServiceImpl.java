@@ -1,5 +1,6 @@
 package greencity.service;
 
+
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import greencity.client.RestClient;
 import greencity.constant.ErrorMessage;
@@ -163,6 +164,7 @@ public class EventCommentServiceImpl implements EventCommentService {
         return modelMapper.map(eventComment, EventCommentResponseDto.class);
     }
 
+
     private Set<User> mentionedUsers(String commentText) {
         Set<User> mentionedUsers = new HashSet<>();
         if (commentText.contains("@") || commentText.contains("#")) {
@@ -204,5 +206,78 @@ public class EventCommentServiceImpl implements EventCommentService {
 
         eventCommentRepo.save(eventComment);
         return "Comment deleted successfully";
+    }
+
+
+    @Transactional
+    @Override
+    public void update(Long commentId, String commentText, String email) {
+        EventComment comment = eventCommentRepo.findByIdAndStatusNot(commentId, CommentStatus.DELETED)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.EVENT_COMMENT_NOT_FOUND_BY_Id + commentId));
+
+        UserVO userVO = userService.findByEmail(email);
+
+        if (!userVO.getId().equals(comment.getUser().getId())) {
+            throw new UserHasNoPermissionToAccessException(ErrorMessage.USER_HAS_NO_PERMISSION);
+        }
+        comment.setText(commentText);
+        comment.setStatus(CommentStatus.EDITED);
+        eventCommentRepo.save(comment);
+
+    }
+
+    @Override
+    public EventCommentResponseDto reply(Long eventId, Long commentId, EventCommentRequestDto requestDto, UserVO user) {
+        EventComment parentComment = eventCommentRepo.findById(commentId)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.EVENT_COMMENT_NOT_FOUND_BY_Id + commentId));
+
+        if (parentComment.getParentComment() != null) {
+            throw new BadRequestException(ErrorMessage.CANNOT_REPLY_THE_REPLY);
+        }
+
+        Event event = parentComment.getEvent();
+
+        EventComment replyComment = modelMapper.map(requestDto, EventComment.class);
+
+        replyComment.setEvent(event);
+        replyComment.setUser(modelMapper.map(user, User.class));
+        replyComment.setParentComment(parentComment);
+        replyComment.setStatus(CommentStatus.ORIGINAL);
+
+        Set<User> mentionedUsers = mentionedUsers(requestDto.getText());
+        replyComment.setMentionedUsers(mentionedUsers);
+
+        replyComment = eventCommentRepo.save(replyComment);
+        sendNotifications(replyComment, event, replyComment.getUser());
+
+        return modelMapper.map(replyComment, EventCommentResponseDto.class);
+
+
+    }
+    @Override
+    public int countOfReplies(Long commentId) {
+        return eventCommentRepo.countReplies(commentId);
+    }
+
+    @Override
+    public PageableDto<EventCommentResponseDto> getAllCommentsReplies(Long commentId, Long eventId, Pageable pageable) {
+        EventComment parentComment = eventCommentRepo.findByIdAndEventId(commentId, eventId)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.EVENT_COMMENT_NOT_FOUND_BY_Id + commentId));
+
+        if (parentComment.getParentComment() != null) {
+            throw new BadRequestException(ErrorMessage.CANNOT_HAVE_REPLIES);
+        }
+
+        Page<EventComment> repliesPage = eventCommentRepo.findAllByParentComment(parentComment, pageable);
+
+        List<EventCommentResponseDto> replyDtos = repliesPage.getContent().stream()
+                .map(reply -> modelMapper.map(reply, EventCommentResponseDto.class))
+                .collect(Collectors.toList());
+
+        return new PageableDto<>(
+                replyDtos,
+                repliesPage.getTotalElements(),
+                repliesPage.getPageable().getPageNumber(),
+                repliesPage.getTotalPages());
     }
 }
