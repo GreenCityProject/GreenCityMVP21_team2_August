@@ -1,5 +1,6 @@
 package greencity.dto.event;
 
+import greencity.annotations.ValidDates;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
@@ -8,6 +9,7 @@ import lombok.*;
 
 import java.time.ZonedDateTime;
 
+@ValidDates
 @Getter
 @Setter
 @NoArgsConstructor
