@@ -2,7 +2,9 @@ package greencity.service;
 
 import greencity.client.RestClient;
 import greencity.constant.ErrorMessage;
+import greencity.dto.PageableDto;
 import greencity.dto.event.*;
+import greencity.dto.search.SearchEventsDto;
 import greencity.dto.user.EventAuthorDto;
 import greencity.dto.user.UserVO;
 import greencity.entity.*;
@@ -15,10 +17,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -132,5 +138,23 @@ public class EventServiceImpl implements EventService {
         }
 
         toUpdate.setImagePaths(imagePaths);
+    }
+
+    public PageableDto<SearchEventsDto> search (Pageable pageable, String query) {
+        List<Event> events = eventRepository.findAllByContainingTitle(query);
+        Page page = new PageImpl(Arrays.asList(events.toArray()), pageable, events.size());
+        return getPageableDto(page);
+    }
+
+    private PageableDto<SearchEventsDto> getPageableDto(Page<Event> page) {
+        List<SearchEventsDto> eventsDtos = page
+                .stream()
+                .map(event -> modelMapper.map(event, SearchEventsDto.class))
+                .collect(Collectors.toList());
+        return new PageableDto<SearchEventsDto>(
+                eventsDtos,
+                page.getTotalElements(),
+                page.getTotalPages(),
+                page.getNumber());
     }
 }
