@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="Fedyk-4" author="Vitalii Fedyk">
+        <createTable tableName="event_attendees">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="event_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mark" type="varchar(15)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="event_attendees"
+                                 baseColumnNames="event_id"
+                                 constraintName="FK_event_attendee_event_id"
+                                 referencedTableName="events"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="event_attendees"
+                                 baseColumnNames="user_id"
+                                 constraintName="FK_event_attendee_user_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+        <addUniqueConstraint tableName="event_attendees" columnNames="event_id, user_id"
+                             constraintName="UK_event_attendee_event_id_user_id"/>
+    </changeSet>
+</databaseChangeLog>
