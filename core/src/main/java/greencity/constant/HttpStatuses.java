@@ -4,6 +4,7 @@ public final class HttpStatuses {
     public static final String OK = "OK";
     public static final String CREATED = "Created";
     public static final String NO_CONTENT = "No Content";
+    public static final String Unsupported_Media_Type = "Unsupported Media Type";
 
     public static final String BAD_REQUEST = "Bad Request";
     public static final String UNAUTHORIZED = "Unauthorized";

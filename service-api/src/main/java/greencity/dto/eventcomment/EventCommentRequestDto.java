@@ -14,7 +14,7 @@ import lombok.*;
 public class EventCommentRequestDto {
     @NotBlank(message = "Comment cannot be blank")
     @Size(min = 1, max = 8000)
-    @Pattern(regexp = "^[\\\\w\\\\s!\"#$%&'()*+,-./:;<=>?@[\\\\]^_`{|}~]*$\n", message = "Comment text contains invalid characters")
+    //@Pattern(regexp = "^[\\\\w\\\\s!\"#$%&'()*+,-./:;<=>?@[\\\\]^_`{|}~]*$\n", message = "Comment text contains invalid characters")
     private String text;
 
     private Long parentCommentId;
